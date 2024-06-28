@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './dahsboard.component.css'
 })
 export class DahsboardComponent {
-
+  name: string = "Layles";
+  
 }
