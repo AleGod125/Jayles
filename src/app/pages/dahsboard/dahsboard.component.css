@@ -1,4 +1,6 @@
-
+body{
+    background-color: rgb(247, 246, 246);
+}
 .navbar-brand {
     display: flex;
     flex-direction: row;
@@ -27,3 +29,104 @@
 .btnNatvar:hover{
     background-color:lightgray;
 }
+
+.carousel-inner img {
+    margin-top: 2%;
+    max-height: 60vh; 
+    object-fit: cover; 
+}
+
+.puclicidad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 900px) {
+    .puclicidad {
+        flex-direction: column;
+    }
+}
+
+
+.publicidad {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .pu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    padding: 20px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    margin: 24px;
+    text-align: center;
+    background-color: #fff;
+  }
+
+  .pu svg {
+    margin-bottom: 15px;
+  }
+
+  .pu-text {
+    margin-top: 15px;
+  }
+
+
+
+.truck {
+    background-color: rgb(228, 228, 228);
+    padding: 24px;
+    clip-path: circle(40%);
+    width: auto;
+    height: auto;
+}
+
+.textTitle {
+    background-color: rgba(0, 0, 0, 0.637);
+    width: 30%;
+    margin: 25px auto 0;
+    border-radius: 15px;
+    padding: 8px;
+}
+
+
+.textsub {
+    background-color: rgba(0, 0, 0, 0.637);
+    width: 40%;
+    margin: -1px auto 0;
+    border-radius: 15px;
+    padding: 8px;
+}
+
+.image-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; 
+  }
+  
+  .image-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px; 
+    padding: 10px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    background-color: #fff;
+  }
+  
+  .image-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
