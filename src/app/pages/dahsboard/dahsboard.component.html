@@ -59,21 +59,15 @@
   </div>
 
   <div>
-    <h1 style="display: flex; justify-content: center; margin: 15px; margin-bottom: 30px;">{{Catalogo}}</h1>
+    <h1 style="display: flex; justify-content: center; margin: 15px;">{{ Catalogo }}</h1>
     <div class="image-list">
-      <div *ngFor="let image of paginatedImages" class="image-item">
+      <div *ngFor="let image of images()" class="image-item">
         <img [src]="image.url" [alt]="image.alt">
         <p>{{ image.alt }}</p>
       </div>
     </div>
-    <div class="pagination">
-      <button *ngFor="let page of [].constructor(totalPages); let i = index" 
-              (click)="goToPage(i + 1)"
-              [class.active]="currentPage === (i + 1)">
-        {{ i + 1 }}
-      </button>
-    </div>
   </div>
+  
   
   <div class="personalizarcamisas">
     <div class="divbutom">
@@ -81,6 +75,13 @@
       <h5>Crea tu diseños aqui</h5>
       <button class="btnperzonalizar" id="btnPersonalizar">Presiona aquí!</button>
     </div>
+  </div>
+
+  <div class="contactos">
+    <h1>aqui van los contactos  <br>
+    </h1>
+    
+    <input type="file" accept="image/*" (change)="changeInput($event)" />
   </div>
 
 
