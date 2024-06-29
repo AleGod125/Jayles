@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dahsboard.component.css'
 })
 export class DahsboardComponent {
-  name: string = "Layles";
   Catalogo: string = "Catalogo";
 
 
