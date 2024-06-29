@@ -103,3 +103,57 @@ body{
     margin-bottom: 10px;
   }
   
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .pagination button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  .personalizarcamisas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 32px;
+    border-radius: 20px;
+    background-image: url("https://cdn.latostadora.com/img/designtoollandings/tshirts/es/mainbanner.desktop.webp");
+    background-size: cover;
+    /* Ajustar la imagen para que cubra todo el contenedor */
+    background-position: center;
+    /* Centrar la imagen en el contenedor */
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, .7);
+}
+
+.divbutom {
+    background-color: rgba(255, 255, 255, 0.685);
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
+    margin-left: 65%;
+    margin-top: 20%;
+    margin-bottom: 3%;
+}
+
+.btnperzonalizar {
+    margin-top: 24px;
+    border: 2px solid red;
+    border-radius: 8px;
+    background-color: white;
+    padding: 8px;
+    color: red;
+    font-weight: bold;
+    box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
+}
+  

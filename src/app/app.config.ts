@@ -8,5 +8,5 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideFirebaseApp(() => initializeApp({"projectId":"jailes","appId":"1:498125157098:web:62249e1564e87d566add93","storageBucket":"jailes.appspot.com","apiKey":"AIzaSyD8uxBTCas6gzJ_O1D0kRAw-IQBY1VHDjg","authDomain":"jailes.firebaseapp.com","messagingSenderId":"498125157098","measurementId":"G-FN32K87T1M"})), provideAnalytics(() => getAnalytics()), ScreenTrackingService, provideFirestore(() => getFirestore()), provideStorage(() => getStorage())]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideFirebaseApp(() => initializeApp({ "projectId": "jailes", "appId": "1:498125157098:web:62249e1564e87d566add93", "storageBucket": "jailes.appspot.com", "apiKey": "AIzaSyD8uxBTCas6gzJ_O1D0kRAw-IQBY1VHDjg", "authDomain": "jailes.firebaseapp.com", "messagingSenderId": "498125157098", "measurementId": "G-FN32K87T1M" })), provideAnalytics(() => getAnalytics()), ScreenTrackingService, provideFirestore(() => getFirestore()), provideStorage(() => getStorage())]
 };
