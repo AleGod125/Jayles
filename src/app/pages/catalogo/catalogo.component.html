@@ -1,0 +1,27 @@
+<div class="contenedor">
+    <div class="catalogo">
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand">{{Caralogo}}</a>
+          <form class="d-flex" role="search" (ngSubmit)="$event.preventDefault()">
+            <input 
+              class="form-control me-2" 
+              type="search" 
+              placeholder="¿Qué estás buscando?"
+              aria-label="Search"
+              [(ngModel)]="searchTerm"
+              name="search"
+            >
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+          </form>
+        </div>
+      </nav>
+      <div class="image-list">
+        <div *ngFor="let image of getFilteredImages()" class="image-item">
+          <img [src]="image.url" [alt]="image.alt">
+          <p>{{ image.alt }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

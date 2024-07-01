@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { DahsboardComponent } from "./pages/dahsboard/dahsboard.component";
 
 @Component({
@@ -7,7 +7,7 @@ import { DahsboardComponent } from "./pages/dahsboard/dahsboard.component";
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
-    imports: [RouterOutlet, DahsboardComponent]
+    imports: [RouterOutlet, DahsboardComponent, RouterLink]
 })
 export class AppComponent {
   title = 'jailes';
