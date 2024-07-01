@@ -10,5 +10,5 @@ import { DahsboardComponent } from "./pages/dahsboard/dahsboard.component";
     imports: [RouterOutlet, DahsboardComponent]
 })
 export class AppComponent {
-  title = 'jayles';
+  title = 'jailes';
 }
