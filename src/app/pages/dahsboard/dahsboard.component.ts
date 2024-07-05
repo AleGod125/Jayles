@@ -2,11 +2,12 @@ import { Component, AfterViewInit, OnInit, inject, signal } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { Storage, ref, uploadBytesResumable, percentage, getDownloadURL } from '@angular/fire/storage';
 import { listAll } from 'firebase/storage';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dahsboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dahsboard.component.html',
   styleUrls: ['./dahsboard.component.css']
 })

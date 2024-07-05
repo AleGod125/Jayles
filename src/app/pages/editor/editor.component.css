@@ -1,0 +1,58 @@
+.contenedor {
+    display: flex;
+}
+
+.opciones {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.camisa {
+    background-color: green;
+    width: 70%;
+}
+
+.btn {
+    padding: 16px;
+    border-radius: 15px;
+    background-color: transparent;
+    font-weight: bold;
+    margin: 20px;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.7);
+}
+
+.separador {
+    width: 95%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+.colorSelector{
+    background-color: lightgray;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.color {
+    display: flex;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 8px;
+    border-radius: 50%;
+    transition: box-shadow 0.2s ease;
+    
+}
+
+.color:hover {
+    box-shadow: 0 0 0 2px orange !important;
+    cursor: pointer;
+}
+
+.color.selected {
+    box-shadow: 0 0 0 2px orange;
+}
