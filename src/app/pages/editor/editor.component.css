@@ -54,6 +54,7 @@
 }
 
 .diseño{
+    position: relative;
     background-color: lightgray;
     display: flex;
     flex-direction: column;
@@ -72,8 +73,26 @@
     border: 3px solid black;
     position: absolute;
     margin-top: 7%;
-    min-width: 25%;
-    max-width: 25%;
+    min-width: 35%;
+    max-width: 35%;
     max-height: 70%;
     min-height: 70%;
 }
+.edit-text-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .btnElminiar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 16px;
+    border-radius: 15px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    margin: 20px;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.7);
+  }
