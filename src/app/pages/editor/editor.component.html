@@ -15,7 +15,8 @@
             </svg>
             Importar imagen
         </label>
-        <input id="file-upload" type="file" style="display: none;" />
+        <input id="file-upload" type="file" style="display: none;" (change)="onFileSelected($event)" />
+        
 
         <button class="btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-fonts"
@@ -53,7 +54,8 @@
     </div>
     <div class="diseño">
         <h1>Personaliza tus Camisas Aqui</h1>
-        <img src="{{camisa}}" alt="" class="camisa">
-        <canvas class="canvas"></canvas>
+        <img src="{{camisaedior}}" alt="" class="camisa">
+        <canvas #canvas class="canvas"></canvas>
+
     </div>
 </div>
