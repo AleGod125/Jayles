@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import Konva from 'konva';
+
 
 @Component({
   selector: 'app-editor',
@@ -10,9 +12,11 @@ import { RouterLink } from '@angular/router';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css']
 })
-export class EditorComponent {
-  @ViewChild('canvas', { static: true })
-  canvas!: ElementRef<HTMLCanvasElement>;
+export class EditorComponent implements AfterViewInit {
+  
+  @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
+
   colors: string[] = ['blue', 'red', 'green', 'yellow', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
   camisa: string = "";
@@ -21,44 +25,18 @@ export class EditorComponent {
   editingText = false;
   editText = '';
   
-  ngAfterViewInit(): void {
-    if (this.camisa) {
-      this.paintImage(this.camisa);
-    }
-  }
-
+ 
   selectColor(color: string): void {
     this.selectedColor = color;
     alert(color);
   }
 
   onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          this.paintImage(img.src);
-        };
-        img.src = e.target!.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+   
   }
 
   paintImage(src: string): void {
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    const ctx = canvasEl.getContext('2d');
-    const img = new Image();
-    img.onload = () => {
-      const scale = 0.5;
-      const x = (canvasEl.width * scale) / 2;
-      const y = (canvasEl.height * scale) / 2;
-      ctx!.drawImage(img, x, y, (canvasEl.width / 2), (canvasEl.height/2)); // Draw the image scaled to 50% and centered
-    };
-    img.src = src;
+   
   }
   startEdit(): void {
     this.editingText = true;
@@ -66,22 +44,162 @@ export class EditorComponent {
   
   finishEdit(): void {
     this.editingText = false;
-    this.drawText(this.editText);
+   
   }
   drawText(text: string): void {
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    const ctx = canvasEl.getContext('2d');
-    if (ctx) {
-      ctx.font = '20px Arial';
-      ctx.fillStyle = 'black';
-      ctx.textAlign = 'center';
-      ctx.fillText(text, canvasEl.width / 2, canvasEl.height / 2);
-    }
+  
   }
 
   clear(){
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    const ctx = canvasEl.getContext('2d');
-    ctx!.clearRect(0, 0, canvasEl.width, canvasEl.height); // Clear the canvas
   }
-}  
+
+   
+  private stage!: Konva.Stage;
+  private layer!: Konva.Layer;
+  private transformer!: Konva.Transformer;
+  private selectionRectangle!: Konva.Rect;
+  private selecting = false;
+  private x1 = 0;
+  private y1 = 0;
+  private x2 = 0;
+  private y2 = 0;
+
+  ngAfterViewInit() {
+    const container = this.containerRef.nativeElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    this.stage = new Konva.Stage({
+      container: container,
+      width: width,
+      height: height,
+    });
+
+    this.layer = new Konva.Layer();
+    this.stage.add(this.layer);
+
+    this.transformer = new Konva.Transformer();
+    this.layer.add(this.transformer);
+
+    this.selectionRectangle = new Konva.Rect({
+      fill: 'rgba(0,0,255,0.5)',
+      visible: false,
+      listening: false,
+    });
+    this.layer.add(this.selectionRectangle);
+
+    this.stage.on('mousedown touchstart', this.onStartSelection.bind(this));
+    this.stage.on('mousemove touchmove', this.onMoveSelection.bind(this));
+    this.stage.on('mouseup touchend', this.onEndSelection.bind(this));
+    this.stage.on('click tap', this.onStageClick.bind(this));
+
+    this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
+  }
+
+  private onStartSelection(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
+    if (e.target !== this.stage) return;
+
+    e.evt.preventDefault();
+    const pointer = this.stage.getPointerPosition();
+    if (!pointer) return;
+
+    this.x1 = pointer.x;
+    this.y1 = pointer.y;
+    this.x2 = this.x1;
+    this.y2 = this.y1;
+
+    this.selectionRectangle.width(0);
+    this.selectionRectangle.height(0);
+    this.selecting = true;
+  }
+
+  private onMoveSelection(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
+    if (!this.selecting) return;
+
+    e.evt.preventDefault();
+    const pointer = this.stage.getPointerPosition();
+    if (!pointer) return;
+
+    this.x2 = pointer.x;
+    this.y2 = pointer.y;
+
+    this.selectionRectangle.setAttrs({
+      visible: true,
+      x: Math.min(this.x1, this.x2),
+      y: Math.min(this.y1, this.y2),
+      width: Math.abs(this.x2 - this.x1),
+      height: Math.abs(this.y2 - this.y1),
+    });
+  }
+
+  private onEndSelection(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
+    this.selecting = false;
+    if (!this.selectionRectangle.visible()) return;
+
+    e.evt.preventDefault();
+    this.selectionRectangle.visible(false);
+
+    const shapes = this.stage.find('.rect');
+    const box = this.selectionRectangle.getClientRect();
+    const selected = shapes.filter((shape) =>
+      Konva.Util.haveIntersection(box, shape.getClientRect())
+    );
+    this.transformer.nodes(selected);
+  }
+
+  private onStageClick(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
+    if (this.selectionRectangle.visible()) return;
+
+    if (e.target === this.stage) {
+      this.transformer.nodes([]);
+      return;
+    }
+
+    if (!e.target.hasName('rect')) return;
+
+    const metaPressed = e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey;
+    const isSelected = this.transformer.nodes().indexOf(e.target) >= 0;
+
+    if (!metaPressed && !isSelected) {
+      this.transformer.nodes([e.target]);
+    } else if (metaPressed && isSelected) {
+      const nodes = this.transformer.nodes().slice();
+      nodes.splice(nodes.indexOf(e.target), 1);
+      this.transformer.nodes(nodes);
+    } else if (metaPressed && !isSelected) {
+      const nodes = this.transformer.nodes().concat([e.target]);
+      this.transformer.nodes(nodes);
+    }
+  }
+
+  private onFileChange(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.addImage(file);
+    }
+  }
+
+  private addImage(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const konvaImage = new Konva.Image({
+          x: 80,
+          y: 80,
+          image: img,
+          width: img.width / 2,
+          height: img.height / 2,
+          name: 'rect',
+          draggable: true,
+        });
+        this.layer.add(konvaImage);
+        this.layer.draw();
+        this.transformer.nodes([konvaImage]);
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+}
