@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import Konva from 'konva';
 
-
 @Component({
   selector: 'app-editor',
   standalone: true,
@@ -21,39 +20,10 @@ export class EditorComponent implements AfterViewInit {
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
   camisa: string = "";
   selectedColor: string = '';
-  camisaedior: string = 'https://static.vecteezy.com/system/resources/previews/008/534/684/original/white-t-shirt-mockup-cutout-file-png.png'
+  camisaedior: string = 'https://static.vecteezy.com/system/resources/previews/008/534/684/original/white-t-shirt-mockup-cutout-file-png.png';
   editingText = false;
   editText = '';
-  
- 
-  selectColor(color: string): void {
-    this.selectedColor = color;
-    alert(color);
-  }
 
-  onFileSelected(event: Event): void {
-   
-  }
-
-  paintImage(src: string): void {
-   
-  }
-  startEdit(): void {
-    this.editingText = true;
-  }
-  
-  finishEdit(): void {
-    this.editingText = false;
-   
-  }
-  drawText(text: string): void {
-  
-  }
-
-  clear(){
-  }
-
-   
   private stage!: Konva.Stage;
   private layer!: Konva.Layer;
   private transformer!: Konva.Transformer;
@@ -65,6 +35,11 @@ export class EditorComponent implements AfterViewInit {
   private y2 = 0;
 
   ngAfterViewInit() {
+    this.initializeKonva();
+    this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
+  }
+
+  private initializeKonva() {
     const container = this.containerRef.nativeElement;
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -92,8 +67,6 @@ export class EditorComponent implements AfterViewInit {
     this.stage.on('mousemove touchmove', this.onMoveSelection.bind(this));
     this.stage.on('mouseup touchend', this.onEndSelection.bind(this));
     this.stage.on('click tap', this.onStageClick.bind(this));
-
-    this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
   }
 
   private onStartSelection(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
@@ -201,5 +174,33 @@ export class EditorComponent implements AfterViewInit {
       img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
+  }
+
+  selectColor(color: string): void {
+    this.selectedColor = color;
+    alert(color);
+  }
+
+  startEdit(): void {
+    this.editingText = true;
+  }
+
+  finishEdit(): void {
+    this.editingText = false;
+    this.drawText(this.editText);
+  }
+
+  drawText(text: string): void {
+    const textNode = new Konva.Text({
+      x: 50,
+      y: 70,
+      fontSize: 30,
+      text: text,
+      name: 'rect',
+      draggable: true,
+    });
+    this.layer.add(textNode);
+    this.layer.draw();
+    this.transformer.nodes([textNode]);
   }
 }
