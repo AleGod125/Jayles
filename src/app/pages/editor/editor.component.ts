@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import Konva from 'konva';
@@ -202,5 +202,27 @@ export class EditorComponent implements AfterViewInit {
     this.layer.add(textNode);
     this.layer.draw();
     this.transformer.nodes([textNode]);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Delete') {
+      this.deleteSelected();
+    }
+  }
+
+  deleteSelected() {
+    const selectedNodes = this.transformer.nodes();
+    selectedNodes.forEach(node => {
+      node.remove();
+    });
+    this.transformer.nodes([]);
+    this.layer.draw();
+  }
+
+  clearCanvas() {
+    this.layer.removeChildren();
+    this.layer.draw();
+    this.transformer.nodes([]);
   }
 }

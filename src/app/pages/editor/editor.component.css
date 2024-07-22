@@ -61,13 +61,14 @@
     align-items: center;
     justify-content: center;
     width: 70%;
-    height: 96vh;
+    height: 110vh;
 }
   #container {
-    background-color: green;
-    width: 500px;
-    height: 500px;
-    position: relative;
+    border: 3px solid black;
+    width: 36%;
+    height: 70%;
+    margin-top: 10%;
+    position: absolute;
   }
 
   input[type="file"] {
@@ -76,3 +77,32 @@
     left: 10px;
     z-index: 1;
   }
+
+  .btnElminiar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 16px;
+    border-radius: 15px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    margin: 20px;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.7);
+  }
+  .camisa{
+    width: 80%;
+    height: 90%;
+}
+
+.Pedidos{
+    padding: 16px;
+    border: 0;
+    background-color: aqua;
+    width: 80%;
+    border-radius: 20px;
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    margin: 16px;
+}

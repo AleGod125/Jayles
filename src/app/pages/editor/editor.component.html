@@ -28,7 +28,6 @@
       </svg>
       Editar Texto</button>
 
-
     <div class="separador"></div>
 
     <div class="fondo">
@@ -53,7 +52,13 @@
 
     <div class="separador"></div>
 
+    <button class="Pedidos">Hacer pedido</button>
   </div>
+
   <div class="diseño">
-    <div #container id="container" ></div>
+    <h1>Personaliza tu diseño aquí</h1>
+    <img src="{{camisaedior}}" alt="" class="camisa">
+    <div #container id="container"></div>
+    <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
+  </div>
 </div>
