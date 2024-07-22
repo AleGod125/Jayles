@@ -20,6 +20,7 @@ export class EditorComponent implements AfterViewInit {
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
   camisa: string = "";
   selectedColor: string = '';
+  selectedTalla: string = '';
   camisaedior: string = 'https://static.vecteezy.com/system/resources/previews/008/534/684/original/white-t-shirt-mockup-cutout-file-png.png';
   editingText = false;
   editText = '';
@@ -178,7 +179,10 @@ export class EditorComponent implements AfterViewInit {
 
   selectColor(color: string): void {
     this.selectedColor = color;
-    alert(color);
+  }
+
+  selectTalla(talla: string): void {
+    this.selectedTalla = talla;
   }
 
   startEdit(): void {
@@ -224,5 +228,11 @@ export class EditorComponent implements AfterViewInit {
     this.layer.removeChildren();
     this.layer.draw();
     this.transformer.nodes([]);
+  }
+
+  getbuy(){
+    alert(
+      "Talla " + this.selectedTalla + "\n" + "Color " + this.selectedColor
+    )
   }
 }

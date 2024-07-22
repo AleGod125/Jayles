@@ -62,6 +62,7 @@
     justify-content: center;
     width: 70%;
     height: 110vh;
+    margin-top: 16px;
 }
   #container {
     border: 3px solid black;

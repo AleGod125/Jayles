@@ -44,7 +44,7 @@
     <div class="fondo">
       <h3 style="margin: 15px;">Seleccione tu Talla</h3>
       <div class="colorSelector">
-        <div *ngFor="let talla of Tallas" class="color">
+        <div *ngFor="let talla of Tallas" class="color" (click)="selectTalla(talla)">
           <p>{{talla}}</p>
         </div>
       </div>
@@ -52,13 +52,15 @@
 
     <div class="separador"></div>
 
-    <button class="Pedidos">Hacer pedido</button>
+    <button class="Pedidos" (click)="getbuy()" >Hacer pedido</button>
   </div>
 
-  <div class="diseño">
+  <div class="diseño" >
     <h1>Personaliza tu diseño aquí</h1>
-    <img src="{{camisaedior}}" alt="" class="camisa">
-    <div #container id="container"></div>
+    <div class="diseño" style=" width: 100%;">
+      <img src="{{camisaedior}}" alt="" class="camisa">
+      <div #container id="container"></div>
+    </div>
     <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
   </div>
 </div>
