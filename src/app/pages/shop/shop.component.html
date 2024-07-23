@@ -1,13 +1,13 @@
 <div class="Contenedor">
     <h1>Carrito de compra</h1>
-    <div class="cardshop">
+    <div class="cardshop" *ngFor="let compra of listaCompra; let i = index">
         <div class="imapre">
             <img src="\utils\Logo_Viloria_s_Custom_shirts-sinfondo.png" alt="" class="img">
         </div>
         <div class="infoshop">
             <h3>Suéter con diseño personalizado</h3>
-            <p>Color: </p>
-            <p>Talla: </p>
+            <p>Color: {{compra.color}}</p>
+            <p>Talla: {{compra.talla}}</p>
             <p>Diseño: </p>
             <h1 class="Precio">$Precio</h1>
             <div class="quantity">
@@ -27,7 +27,7 @@
                     <option *ngFor="let num of quantities" [value]="num">Cantidad: {{ num }}</option>
                     <option value="10+">Cantidad {{mayor}}</option>
                 </select>
-                <button class="btnElminar" >Eliminar</button>
+                <button class="btnElminar" (click)="ElminarTarea(i)">Eliminar</button>
             </div>
         </div>
     </div>

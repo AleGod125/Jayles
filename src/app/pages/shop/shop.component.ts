@@ -19,14 +19,15 @@ export class ShopComponent implements OnInit {
   editingText = false;
   editText = '11';
   mayor:string ="+10";
-  listaCompra: string[] = [];
+  listaCompra: { color: string; talla: string }[] = [];
 
 
   ngOnInit(): void {
     this.listaCompra = this._compraService.getCompra()
   }
   ElminarTarea(index: number) {
-
+    this._compraService.Eliminar(index)
+    this.listaCompra = this._compraService.getCompra()
   }
   onQuantityChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
