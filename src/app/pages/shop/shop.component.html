@@ -1,0 +1,8 @@
+<div>
+    <h2>Lista de compra</h2>
+    <ul>
+        <li *ngFor="let compra of listaCompra; let i = index">
+           {{compra}} <button (click)="ElminarTarea(i)" >Elimininar</button> 
+        </li>
+    </ul>
+</div>

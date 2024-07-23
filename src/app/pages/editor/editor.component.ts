@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import Konva from 'konva';
+import { ShopService } from '../../service/shop.service';
 
 @Component({
   selector: 'app-editor',
@@ -35,6 +36,8 @@ export class EditorComponent implements AfterViewInit {
   private x2 = 0;
   private y2 = 0;
 
+  private _compraService = inject(ShopService)
+  
   ngAfterViewInit() {
     this.initializeKonva();
     this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
@@ -230,9 +233,11 @@ export class EditorComponent implements AfterViewInit {
     this.transformer.nodes([]);
   }
 
-  getbuy(){
-    alert(
-      "Talla " + this.selectedTalla + "\n" + "Color " + this.selectedColor
-    )
+
+
+  agregarCompra(){
+    this._compraService.AgregarCompra(this.selectedColor,this.selectedTalla)
+    this.selectedTalla , this.selectedColor = ""
+    
   }
 }
