@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {RouterLink } from '@angular/router'; // Asegúrate de importar Router aquí
 import html2canvas from 'html2canvas';
 import { ShopService } from '../../service/shop.service';
 import { KonvaService } from '../../service/kovan.service';
@@ -24,25 +24,26 @@ export class EditorComponent implements AfterViewInit {
   camisa: string = "";
   selectedColor: string = '';
   selectedTalla: string = '';
-  selectedDiseño: string = '/utils/white-t-shirt-mockup-cutout-file-png.webp';
+  selectedDiseño: string = '';
   camisaedior: string = '/utils/white-t-shirt-mockup-cutout-file-png.webp';
   editingText = false;
   editText = '';
 
-  private _compraService = inject(ShopService);
-  private _konvaService = inject(KonvaService);
-  
+  constructor(
+    private shopService: ShopService,
+    private konvaService: KonvaService,
+  ) {}
+
   ngAfterViewInit() {
     const container = this.containerRef.nativeElement;
-    this._konvaService.initialize(container, container.clientWidth, container.clientHeight);
-    this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
+    this.konvaService.initialize(container, container.clientWidth, container.clientHeight);
   }
 
-  private onFileChange(e: Event) {
+   onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this._konvaService.addImage(file);
+      this.konvaService.addImage(file);
     }
   }
 
@@ -68,42 +69,58 @@ export class EditorComponent implements AfterViewInit {
   }
 
   drawText(text: string): void {
-    this._konvaService.drawText(text);
+    this.konvaService.drawText(text);
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Delete') {
-      this._konvaService.deleteSelected();
+      this.konvaService.deleteSelected();
     }
   }
 
   clearCanvas() {
-    this._konvaService.clearCanvas();
+    this.konvaService.clearCanvas();
   }
 
-  
-  agregarCompra(){
-    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
+  agregarCompra() {
+    this.shopService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
     this.selectedTalla = '';
     this.selectedColor = '';
+    this.selectedDiseño = '';
   }
 
-  boton(){
-    this.captureEditorShirt();
+  async boton() {
+    await this.captureEditorShirt();
+    this.agregarCompra();
   }
 
-  captureEditorShirt() {
-    const editorShirt = this.editorShirtRef?.nativeElement;
-    if (editorShirt) {
-      html2canvas(editorShirt).then(canvas => {
-        const dataURL = canvas.toDataURL('image/png');
-        this.selectedDiseño = dataURL;
-        console.log(dataURL)
-        this.agregarCompra();
-      });
-    } else {
-      console.error('El elemento editorShirt no está definido.');
-    }
+  captureEditorShirt(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const editorShirt = this.editorShirtRef?.nativeElement;
+      if (editorShirt) {
+        const container = this.containerRef.nativeElement;
+  
+        const originalBorder = container.style.border;
+  
+        container.style.border = 'none';
+  
+        html2canvas(editorShirt).then(canvas => {
+          const dataURL = canvas.toDataURL('image/png');
+  
+          container.style.border = originalBorder;
+  
+          this.selectedDiseño = dataURL;
+          resolve();
+        }).catch(err => {
+          container.style.border = originalBorder;
+          reject(err);
+        });
+      } else {
+        console.error('El elemento editorShirt no está definido.');
+        reject('El elemento editorShirt no está definido.');
+      }
+    });
   }
+  
 }

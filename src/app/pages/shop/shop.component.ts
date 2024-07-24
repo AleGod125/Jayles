@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ShopService } from '../../service/shop.service';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.css']
 })
-export class ShopComponent implements OnInit {
+export class ShopComponent implements OnInit  {
+ 
 
   private _compraService = inject(ShopService);
   quantities: number[] = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -21,10 +22,14 @@ export class ShopComponent implements OnInit {
   precioUnitario = 25000;
   listaCompra: { color: string; talla: string; img: string; quantity: number; price: number }[] = [];
   subtotal: number = 0;
+  
+  constructor(private shopService: ShopService) {}
 
-  ngOnInit(): void {
-    this.listaCompra = this._compraService.getCompra().map(compra => ({ ...compra, cantidad: 1, precio: this.precioUnitario }));
-    this.updateSubtotal();
+  ngOnInit() {
+    this.shopService.compras$.subscribe(compras => {
+      this.listaCompra = compras;
+      this.updateSubtotal()
+    });
   }
 
   ElminarTarea(index: number) {

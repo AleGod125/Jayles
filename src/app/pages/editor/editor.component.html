@@ -9,7 +9,7 @@
       atrás
     </button>
 
-    <label for="file-upload" class="btn">
+    <label for="file-upload" class="btn" >
       <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
         class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
         <path fill-rule="evenodd"
@@ -17,7 +17,7 @@
       </svg>
       Importar imagen
     </label>
-    <input type="file" id="file-upload" #fileInput style="display: none;" />
+    <input type="file" id="file-upload" #fileInput style="display: none;" (change)="onFileChange($event)"/>
 
     <input type="text" [(ngModel)]="editText" *ngIf="editingText" (keyup.enter)="finishEdit()">
     <button class="btn" (click)="startEdit()" *ngIf="!editingText">
