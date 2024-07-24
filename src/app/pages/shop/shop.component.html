@@ -2,14 +2,14 @@
     <h1>Carrito de compra</h1>
     <div class="cardshop" *ngFor="let compra of listaCompra; let i = index">
         <div class="imapre">
-            <img src={{compra.img}} alt="" class="img">
+            <img [src]="compra.img" alt="" class="img">
         </div>
         <div class="infoshop">
             <h3>Suéter con diseño personalizado</h3>
             <p>Color: {{compra.color}}</p>
             <p>Talla: {{compra.talla}}</p>
             <p>Diseño: </p>
-            <h1 class="Precio">$Precio</h1>
+            <h1 class="Precio">{{compra.price | currency:'USD':true}}</h1>
             <div class="quantity">
                 <input 
                     type="number" 
@@ -20,9 +20,9 @@
                     min="11" 
                     style="width: 10%;">
                 <select 
-                    [(ngModel)]="selectedQuantity" 
+                    [(ngModel)]="compra.quantity" 
                     *ngIf="!editingText" 
-                    (change)="onQuantityChange($event)">
+                    (change)="onQuantityChange($event, i)">
                     <option value="0">0 (Eliminar)</option>
                     <option *ngFor="let num of quantities" [value]="num">Cantidad: {{ num }}</option>
                     <option value="10+">Cantidad {{mayor}}</option>
@@ -30,5 +30,11 @@
                 <button class="btnElminar" (click)="ElminarTarea(i)">Eliminar</button>
             </div>
         </div>
+    </div>
+
+    <button style="margin-bottom: 240px;">Comprar</button>
+
+    <div class="subTotal">
+        <h1>subTotal: {{subtotal | currency:'USD':true}}</h1>
     </div>
 </div>

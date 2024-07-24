@@ -22,8 +22,8 @@ export class EditorComponent implements AfterViewInit {
   camisa: string = "";
   selectedColor: string = '';
   selectedTalla: string = '';
-  selectedDiseño: string = '';
-  camisaedior: string = 'https://static.vecteezy.com/system/resources/previews/008/534/684/original/white-t-shirt-mockup-cutout-file-png.png';
+  selectedDiseño: string = '/utils/white-t-shirt-mockup-cutout-file-png.webp';
+  camisaedior: string = '/utils/white-t-shirt-mockup-cutout-file-png.webp';
   editingText = false;
   editText = '';
 
@@ -241,14 +241,20 @@ export class EditorComponent implements AfterViewInit {
   captureStageAsImage() {
     if (this.stage) {
       const dataURL = this.stage.toDataURL({ pixelRatio: 3 });
-        this.selectedDiseño = dataURL
+      if (dataURL === 'data:,') {
+        this.selectedDiseño = this.selectedDiseño;
+        console.log(dataURL)
+      } else {
+        this.selectedDiseño = dataURL;
+        console.log(dataURL)
+      }
     } else {
       console.error('Stage no está definido.');
     }
   }
   
   agregarCompra(){
-    this._compraService.AgregarCompra(this.selectedColor,this.selectedTalla,this.selectedDiseño)
+    this._compraService.agregarCompra(this.selectedColor,this.selectedTalla,this.selectedDiseño,1,25000)
     this.selectedTalla , this.selectedColor = ""
     
   }

@@ -5,23 +5,28 @@ import { Injectable } from '@angular/core';
 })
 export class ShopService {
 
+  private localStorageKey = 'ShopKey';
 
-  private localStoragekey = 'Shopkey';
-
-  getCompra():{ color: string; talla: string, img:string }[]{
-    return JSON.parse(localStorage.getItem(this.localStoragekey)as string) ||[]
+  getCompra(): { color: string; talla: string; img: string; quantity: number; price: number }[] {
+    return JSON.parse(localStorage.getItem(this.localStorageKey) as string) || [];
   }
 
-  AgregarCompra(color: string, talla: string, img:string): void {
+  agregarCompra(color: string, talla: string, img: string, quantity: number, price: number): void {
     const compra = this.getCompra();
-    compra.push({ color, talla, img });
-    localStorage.setItem(this.localStoragekey, JSON.stringify(compra));
+    compra.push({ color, talla, img, quantity, price });
+    localStorage.setItem(this.localStorageKey, JSON.stringify(compra));
   }
 
-  Eliminar(index:number){
+  eliminar(index: number): void {
     const compra = this.getCompra();
-    compra.splice(index, 1)
-    localStorage.setItem(this.localStoragekey, JSON.stringify(compra));
+    compra.splice(index, 1);
+    localStorage.setItem(this.localStorageKey, JSON.stringify(compra));
   }
 
+  actualizarCompra(index: number, quantity: number, price: number): void {
+    const compra = this.getCompra();
+    compra[index].quantity = quantity;
+    compra[index].price = price;
+    localStorage.setItem(this.localStorageKey, JSON.stringify(compra));
+  }
 }

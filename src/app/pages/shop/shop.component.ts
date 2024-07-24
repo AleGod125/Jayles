@@ -9,44 +9,56 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [RouterOutlet, RouterLink, CommonModule, FormsModule],
   templateUrl: './shop.component.html',
-  styleUrl: './shop.component.css'
+  styleUrls: ['./shop.component.css']
 })
 export class ShopComponent implements OnInit {
 
-  private _compraService = inject(ShopService)
+  private _compraService = inject(ShopService);
   quantities: number[] = Array.from({ length: 10 }, (_, i) => i + 1);
-  selectedQuantity: string | number = 1;
   editingText = false;
   editText = '11';
-  mayor:string ="+10";
-  listaCompra: { color: string; talla: string, img: string }[] = [];
-
+  mayor: string = "+10";
+  precioUnitario = 25000;
+  listaCompra: { color: string; talla: string; img: string; quantity: number; price: number }[] = [];
+  subtotal: number = 0;
 
   ngOnInit(): void {
-    this.listaCompra = this._compraService.getCompra()
+    this.listaCompra = this._compraService.getCompra().map(compra => ({ ...compra, cantidad: 1, precio: this.precioUnitario }));
+    this.updateSubtotal();
   }
+
   ElminarTarea(index: number) {
-    this._compraService.Eliminar(index)
-    this.listaCompra = this._compraService.getCompra()
+    this._compraService.eliminar(index);
+    this.listaCompra = this._compraService.getCompra().map(compra => ({ ...compra, cantidad: 1, precio: this.precioUnitario }));
+    this.updateSubtotal();
   }
-  onQuantityChange(event: Event): void {
+
+  onQuantityChange(event: Event, index: number): void {
     const selectElement = event.target as HTMLSelectElement;
-    const selectedValue = selectElement.value;
-    if (selectedValue === '0') {
-      console.log('Eliminar producto');
-    } else if (selectedValue === '10+') {
-      this.startEdit()
+    const selectedValue = parseInt(selectElement.value);
+    if (selectedValue === 0) {
+      this.ElminarTarea(index);
     } else {
-      console.log(`Cantidad seleccionada: ${selectedValue}`);
+      const compra = this.listaCompra[index];
+      const newPrice = 25000 * selectedValue; // Assuming base price is 25000
+      compra.quantity = selectedValue;
+      compra.price = newPrice;
+      this._compraService.actualizarCompra(index, selectedValue, newPrice);
+      this.updateSubtotal();
     }
+
+  }
+
+  updateSubtotal(): void {
+    this.subtotal = this.listaCompra.reduce((acc, compra) => acc + compra.price, 0);
   }
 
   finishEdit(): void {
     this.editingText = false;
-    this.mayor = this.editText
+    this.mayor = this.editText;
   }
+
   startEdit(): void {
     this.editingText = true;
   }
 }
-
