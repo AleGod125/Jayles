@@ -19,7 +19,7 @@ export class ShopComponent implements OnInit {
   editingText = false;
   editText = '11';
   mayor:string ="+10";
-  listaCompra: { color: string; talla: string }[] = [];
+  listaCompra: { color: string; talla: string, img: string }[] = [];
 
 
   ngOnInit(): void {

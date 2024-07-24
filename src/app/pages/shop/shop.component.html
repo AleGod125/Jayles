@@ -2,7 +2,7 @@
     <h1>Carrito de compra</h1>
     <div class="cardshop" *ngFor="let compra of listaCompra; let i = index">
         <div class="imapre">
-            <img src="\utils\Logo_Viloria_s_Custom_shirts-sinfondo.png" alt="" class="img">
+            <img src={{compra.img}} alt="" class="img">
         </div>
         <div class="infoshop">
             <h3>Suéter con diseño personalizado</h3>

@@ -22,6 +22,7 @@ export class EditorComponent implements AfterViewInit {
   camisa: string = "";
   selectedColor: string = '';
   selectedTalla: string = '';
+  selectedDiseño: string = '';
   camisaedior: string = 'https://static.vecteezy.com/system/resources/previews/008/534/684/original/white-t-shirt-mockup-cutout-file-png.png';
   editingText = false;
   editText = '';
@@ -188,6 +189,10 @@ export class EditorComponent implements AfterViewInit {
     this.selectedTalla = talla;
   }
 
+  selectdiseño(diseño: string): void {
+    this.selectedDiseño = diseño;
+  }
+
   startEdit(): void {
     this.editingText = true;
   }
@@ -233,11 +238,23 @@ export class EditorComponent implements AfterViewInit {
     this.transformer.nodes([]);
   }
 
-
-
+  captureStageAsImage() {
+    if (this.stage) {
+      const dataURL = this.stage.toDataURL({ pixelRatio: 3 });
+        this.selectedDiseño = dataURL
+    } else {
+      console.error('Stage no está definido.');
+    }
+  }
+  
   agregarCompra(){
-    this._compraService.AgregarCompra(this.selectedColor,this.selectedTalla)
+    this._compraService.AgregarCompra(this.selectedColor,this.selectedTalla,this.selectedDiseño)
     this.selectedTalla , this.selectedColor = ""
     
+  }
+
+  boton(){
+    this.captureStageAsImage()
+    this.agregarCompra()
   }
 }
