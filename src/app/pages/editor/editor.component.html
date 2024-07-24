@@ -55,12 +55,12 @@
     <button class="Pedidos" routerLink="/pago" (click)="boton()">Hacer pedido</button>
   </div>
 
-  <div class="diseño" >
+  <div class="diseño">
     <h1>Personaliza tu diseño aquí</h1>
-    <div class="diseño" style=" width: 100%;">
+    <div class="editorshirt" #editorShirt>
       <img src="{{camisaedior}}" alt="" class="camisa">
       <div #container id="container"></div>
     </div>
     <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
   </div>
-</div>
+  

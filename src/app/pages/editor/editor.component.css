@@ -61,14 +61,15 @@
     align-items: center;
     justify-content: center;
     width: 70%;
-    height: 110vh;
+    height: auto;
     margin-top: 16px;
 }
   #container {
     border: 3px solid black;
-    width: 36%;
+    width: 30%;
     height: 70%;
     margin-top: 10%;
+    margin-left: 5px;
     position: absolute;
   }
 
@@ -92,8 +93,8 @@
     box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.7);
   }
   .camisa{
-    width: 80%;
-    height: 90%;
+    width: 65%;
+    height: auto;
 }
 
 .Pedidos{
@@ -106,4 +107,15 @@
     color: white;
     font-weight: bold;
     margin: 16px;
+}
+
+.editorshirt{
+    width: 95%;
+    height: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
 }
