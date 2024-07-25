@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterLink } from '@angular/router'; // Asegúrate de importar Router aquí
 import html2canvas from 'html2canvas';
@@ -29,21 +29,19 @@ export class EditorComponent implements AfterViewInit {
   editingText = false;
   editText = '';
 
-  constructor(
-    private shopService: ShopService,
-    private konvaService: KonvaService,
-  ) {}
+  private _compraService = inject(ShopService);
+  private _konvaService = inject(KonvaService);
 
   ngAfterViewInit() {
     const container = this.containerRef.nativeElement;
-    this.konvaService.initialize(container, container.clientWidth, container.clientHeight);
+    this._konvaService.initialize(container, container.clientWidth, container.clientHeight);
   }
 
    onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this.konvaService.addImage(file);
+      this._konvaService.addImage(file);
     }
   }
 
@@ -69,22 +67,22 @@ export class EditorComponent implements AfterViewInit {
   }
 
   drawText(text: string): void {
-    this.konvaService.drawText(text);
+    this._konvaService.drawText(text);
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Delete') {
-      this.konvaService.deleteSelected();
+      this._konvaService.deleteSelected();
     }
   }
 
   clearCanvas() {
-    this.konvaService.clearCanvas();
+    this._konvaService.clearCanvas();
   }
 
   agregarCompra() {
-    this.shopService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
+    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
     this.selectedTalla = '';
     this.selectedColor = '';
     this.selectedDiseño = '';
