@@ -1,13 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
-import {RouterLink } from '@angular/router'; // Asegúrate de importar Router aquí
+import {RouterLink } from '@angular/router'; 
 import html2canvas from 'html2canvas';
-=======
-import { RouterLink } from '@angular/router';
 import Konva from 'konva';
->>>>>>> parent of 18fdc28 (optimizacion)
 import { ShopService } from '../../service/shop.service';
 
 @Component({
@@ -32,17 +28,6 @@ export class EditorComponent implements AfterViewInit {
   editingText = false;
   editText = '';
 
-<<<<<<< HEAD
-  private _compraService = inject(ShopService);
-  private _konvaService = inject(KonvaService);
-
-  ngAfterViewInit() {
-    const container = this.containerRef.nativeElement;
-    this._konvaService.initialize(container, container.clientWidth, container.clientHeight);
-  }
-
-   onFileChange(e: Event) {
-=======
   private stage!: Konva.Stage;
   private layer!: Konva.Layer;
   private transformer!: Konva.Transformer;
@@ -167,7 +152,6 @@ export class EditorComponent implements AfterViewInit {
   }
 
   private onFileChange(e: Event) {
->>>>>>> parent of 18fdc28 (optimizacion)
     const input = e.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
@@ -255,71 +239,5 @@ export class EditorComponent implements AfterViewInit {
     this.transformer.nodes([]);
   }
 
-<<<<<<< HEAD
-  agregarCompra() {
-    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
-    this.selectedTalla = '';
-    this.selectedColor = '';
-    this.selectedDiseño = '';
-  }
-
-  async boton() {
-    await this.captureEditorShirt();
-    this.agregarCompra();
-  }
-
-  captureEditorShirt(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const editorShirt = this.editorShirtRef?.nativeElement;
-      if (editorShirt) {
-        const container = this.containerRef.nativeElement;
-  
-        const originalBorder = container.style.border;
-  
-        container.style.border = 'none';
-  
-        html2canvas(editorShirt).then(canvas => {
-          const dataURL = canvas.toDataURL('image/png');
-  
-          container.style.border = originalBorder;
-  
-          this.selectedDiseño = dataURL;
-          resolve();
-        }).catch(err => {
-          container.style.border = originalBorder;
-          reject(err);
-        });
-      } else {
-        console.error('El elemento editorShirt no está definido.');
-        reject('El elemento editorShirt no está definido.');
-      }
-    });
-=======
-  captureStageAsImage() {
-    if (this.stage) {
-      const dataURL = this.stage.toDataURL({ pixelRatio: 3 });
-      if (dataURL === 'data:,') {
-        this.selectedDiseño = this.selectedDiseño;
-        console.log(dataURL)
-      } else {
-        this.selectedDiseño = dataURL;
-        console.log(dataURL)
-      }
-    } else {
-      console.error('Stage no está definido.');
-    }
-  }
-  
-  agregarCompra(){
-    this._compraService.agregarCompra(this.selectedColor,this.selectedTalla,this.selectedDiseño,1,25000)
-    this.selectedTalla , this.selectedColor = ""
-    
-  }
-
-  boton(){
-    this.captureStageAsImage()
-    this.agregarCompra()
->>>>>>> parent of 18fdc28 (optimizacion)
-  }
   
 }
