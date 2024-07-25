@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
@@ -17,6 +17,7 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
+  constructor(private cdr: ChangeDetectorRef) {}
 
   colors: string[] = ['blue', 'red', 'green', 'yellow', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
@@ -43,38 +44,44 @@ export class EditorComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.initializeKonva();
     this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
+    this.cdr.detectChanges();
   }
 
   private initializeKonva() {
     const container = this.containerRef.nativeElement;
+    if (!container.clientWidth || !container.clientHeight) {
+      setTimeout(() => this.initializeKonva(), 100); // Reintenta la inicialización
+      return;
+    }
+  
     const width = container.clientWidth;
     const height = container.clientHeight;
-
+  
     this.stage = new Konva.Stage({
       container: container,
       width: width,
       height: height,
     });
-
+  
     this.layer = new Konva.Layer();
     this.stage.add(this.layer);
-
+  
     this.transformer = new Konva.Transformer();
     this.layer.add(this.transformer);
-
+  
     this.selectionRectangle = new Konva.Rect({
       fill: 'rgba(0,0,255,0.5)',
       visible: false,
       listening: false,
     });
     this.layer.add(this.selectionRectangle);
-
+  
     this.stage.on('mousedown touchstart', this.onStartSelection.bind(this));
     this.stage.on('mousemove touchmove', this.onMoveSelection.bind(this));
     this.stage.on('mouseup touchend', this.onEndSelection.bind(this));
     this.stage.on('click tap', this.onStageClick.bind(this));
   }
-
+  
   private onStartSelection(e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) {
     if (e.target !== this.stage) return;
 
