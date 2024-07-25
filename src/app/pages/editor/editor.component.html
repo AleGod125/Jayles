@@ -17,7 +17,7 @@
       </svg>
       Importar imagen
     </label>
-    <input type="file" id="file-upload" #fileInput style="display: none;" (change)="onFileChange($event)"/>
+    <input type="file" id="file-upload" #fileInput style="display: none;" />
 
     <input type="text" [(ngModel)]="editText" *ngIf="editingText" (keyup.enter)="finishEdit()">
     <button class="btn" (click)="startEdit()" *ngIf="!editingText">
@@ -52,15 +52,15 @@
 
     <div class="separador"></div>
 
-    <button class="Pedidos" routerLink="/pago" (click)="boton()">Hacer pedido</button>
+    <button class="Pedidos" routerLink="/pago" (click)="boton()" >Hacer pedido</button>
   </div>
 
-  <div class="diseño" >
+  <div class="diseño">
     <h1>Personaliza tu diseño aquí</h1>
-    <div class="diseño" style=" width: 100%;">
-      <img src="{{camisaedior}}" alt="" class="camisa">
-      <div #container id="container"></div>
+    <div class="diseño" style="width: 100%;">
+        <img src="{{camisaedior}}" alt="" class="camisa">
+        <div #container id="container"></div>
+      <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
     </div>
-    <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
   </div>
-</div>
+  

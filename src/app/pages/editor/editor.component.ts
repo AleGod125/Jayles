@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {RouterLink } from '@angular/router'; 
+import { RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
 import Konva from 'konva';
 import { ShopService } from '../../service/shop.service';
@@ -14,7 +14,7 @@ import { ShopService } from '../../service/shop.service';
   styleUrls: ['./editor.component.css']
 })
 export class EditorComponent implements AfterViewInit {
-  
+  @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
 
@@ -39,7 +39,7 @@ export class EditorComponent implements AfterViewInit {
   private y2 = 0;
 
   private _compraService = inject(ShopService)
-  
+
   ngAfterViewInit() {
     this.initializeKonva();
     this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
@@ -239,5 +239,43 @@ export class EditorComponent implements AfterViewInit {
     this.transformer.nodes([]);
   }
 
-  
+  agregarCompra() {
+    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
+    this.selectedTalla = '';
+    this.selectedColor = '';
+    this.selectedDiseño = '';
+  }
+
+  async boton() {
+    await this.captureEditorShirt();
+    this.agregarCompra();
+  }
+
+  captureEditorShirt(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const editorShirt = this.editorShirtRef?.nativeElement;
+      if (editorShirt) {
+        const container = this.containerRef.nativeElement;
+
+        const originalBorder = container.style.border;
+
+        container.style.border = 'none';
+
+        html2canvas(editorShirt).then(canvas => {
+          const dataURL = canvas.toDataURL('image/png');
+
+          container.style.border = originalBorder;
+
+          this.selectedDiseño = dataURL;
+          resolve();
+        }).catch(err => {
+          container.style.border = originalBorder;
+          reject(err);
+        });
+      } else {
+        console.error('El elemento editorShirt no está definido.');
+        reject('El elemento editorShirt no está definido.');
+      }
+    });
+  }
 }
