@@ -55,14 +55,14 @@
 
 .diseño{
     position: relative;
-    background-color: red;
+    background-color: lightgray;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 70%;
     height: auto;
-    margin-top: 16px;
+    margin-top: 8px;
 }
   #container {
     border: 3px solid black;
@@ -109,8 +109,8 @@
 }
 
 .editorShirtRef{
-    background-color: blue;
     width: 95%;
+    background-color: lightgray;
     height: auto;
     position: relative;
     display: flex;
