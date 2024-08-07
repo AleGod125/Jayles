@@ -1,0 +1,76 @@
+body{
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.names{
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+input, select{
+ margin: 16px;
+ border: 0;
+ border-radius: 10px;
+ padding: 16px;
+}
+
+.inputNames{
+    width: 24%;
+    height: auto;
+}
+
+.inputL{
+    width: 50%;
+    height: auto;
+}
+
+.x{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.metodo{
+    border: 0;
+    width: 25%;
+    padding: 8px;
+    border-radius: 20px;
+    margin: 8px;
+}
+
+.separador {
+    width: 95%;
+    height: 5px;
+    background-color:darkgray;
+    margin: 20px 0;
+}
+
+.metodosPagos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.botonesPagos{
+    margin-top: 16px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 60%;
+}
