@@ -19,13 +19,14 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
   constructor(private cdr: ChangeDetectorRef, private konvaService: KonvaService) {}
 
-  colors: string[] = ['blue', 'red', 'green', 'yellow', 'white', 'black'];
+  colors: string[] = ['blue', 'yellow', 'green', 'grey', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
   camisa: string = "";
-  selectedColor: string = '';
+  selectedColor: string = 'white';
   selectedTalla: string = '';
   selectedDiseño: string = '';
-  camisaedior: string = '/utils/white-t-shirt-mockup-cutout-file-png.webp';
+  camisaposicion: string[] = ["Editar Frente" ,"Editar Costado" , "Editar Espalda"]
+  camisaedior: string = '/utils/blanca_frente.png';
   editingText = false;
   editText = '';
 
@@ -47,6 +48,26 @@ export class EditorComponent implements AfterViewInit {
 
   selectColor(color: string): void {
     this.selectedColor = color;
+    switch(color){
+      case "white":
+        this.camisaedior = "/utils/blanca_frente.png"
+        break
+      case "black":
+        this.camisaedior = "/utils/Negro_Frente.png"
+        break
+      case "blue":
+        this.camisaedior = "/utils/Azul_Frente.png"
+        break
+      case "grey":
+        this.camisaedior = "/utils/Gris_frente.png"
+        break
+        case "yellow":
+        this.camisaedior = "/utils/Yellow_frente.png"
+        break
+        case "green":
+        this.camisaedior = "/utils/Green_frente.png"
+        break
+    }
   }
 
   selectTalla(talla: string): void {
@@ -116,5 +137,49 @@ export class EditorComponent implements AfterViewInit {
       }
     });
   }
+
+  cambio(posicion: string): void {
+    const colorPositionMap: { [key: string]: { [key: string]: string } } = {
+      white: {
+        "Editar Frente": "/utils/blanca_frente.png",
+        "Editar Espalda": "/utils/Blanca_espalda.png",
+        "Editar Costado": "/utils/blanca_costado.png",
+      },
+      black: {
+        "Editar Frente": "utils/Negro_Frente.png",
+        "Editar Espalda": "/utils/negroEspalda.png",
+        "Editar Costado": "/utils/negroCotado.png",
+      },
+      blue: {
+        "Editar Frente": "/utils/Azul_Frente.png",
+        "Editar Espalda": "/utils/Azul_esplada.png",
+        "Editar Costado": "/utils/Azul_Costado.png",
+      },
+      grey: {
+        "Editar Frente": "/utils/Gris_frente.png",
+        "Editar Espalda": "/utils/Gris_espalda.png",
+        "Editar Costado": "/utils/Gris_costado.png",
+      },
+      green: {
+        "Editar Frente": "/utils/Green_frente.png",
+        "Editar Espalda": "/utils/Green_espalda.png",
+        "Editar Costado": "/utils/Green_costado.png",
+      },
+      yellow: {
+        "Editar Frente": "/utils/Yellow_frente.png",
+        "Editar Espalda": "/utils/Yellow_espalda.png",
+        "Editar Costado": "/utils/Yellow_costado.png",
+      }
+    };
+  
+    const selectedPaths = colorPositionMap[this.selectedColor];
+    if (selectedPaths && selectedPaths[posicion]) {
+      this.camisaedior = selectedPaths[posicion];
+    } else {
+      console.error(`No image path found for color: ${this.selectedColor} and position: ${posicion}`);
+    }
+  }
+  
+  
 }
  
