@@ -147,8 +147,8 @@ export class EditorComponent implements AfterViewInit {
       },
       black: {
         "Editar Frente": "utils/Negro_Frente.png",
-        "Editar Espalda": "/utils/negroEspalda.png",
-        "Editar Costado": "/utils/negroCotado.png",
+        "Editar Espalda": "/utils/Negro_espalda.png",
+        "Editar Costado": "/utils/Negro_costado.png",
       },
       blue: {
         "Editar Frente": "/utils/Azul_Frente.png",
