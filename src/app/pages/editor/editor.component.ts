@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { ShopService } from '../../service/shop.service';
 import { KonvaService } from '../../service/konva.service';
-import { and } from 'firebase/firestore';
 
 @Component({
   selector: 'app-editor',
@@ -18,21 +17,25 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
-  constructor(private cdr: ChangeDetectorRef, private konvaService: KonvaService, private renderer: Renderer2) { }
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private konvaService: KonvaService,
+    private renderer: Renderer2
+  ) {}
 
   colors: string[] = ['blue', 'yellow', 'green', 'grey', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
-  camisa: string = "";
   selectedColor: string = 'white';
   selectedTalla: string = '';
   selectedDiseño: string = '';
-  selectedposicion: string = "";
+  selectedPosicion: string = "Editar Frente";
   camisaposicion: string[] = ["Editar Frente", "Editar Costado", "Editar Espalda"]
   camisaedior: string = '/utils/blanca_frente.png';
   editingText = false;
   editText = '';
 
-  private _compraService = inject(ShopService)
+  private _compraService = inject(ShopService);
 
   ngAfterViewInit() {
     this.konvaService.initializeKonva(this.containerRef.nativeElement);
@@ -50,32 +53,8 @@ export class EditorComponent implements AfterViewInit {
 
   selectColor(color: string): void {
     this.selectedColor = color;
-    switch (color) {
-      case "white":
-        this.camisaedior = "/utils/blanca_frente.png"
-        this.defultcontenedor()
-        break
-      case "black":
-        this.camisaedior = "/utils/Negro_Frente.png"
-        this.defultcontenedor()
-        break
-      case "blue":
-        this.camisaedior = "/utils/Azul_Frente.png"
-        this.defultcontenedor()
-        break
-      case "grey":
-        this.camisaedior = "/utils/Gris_frente.png"
-        this.defultcontenedor()
-        break
-      case "yellow":
-        this.camisaedior = "/utils/Yellow_frente.png"
-        this.defultcontenedor()
-        break
-      case "green":
-        this.camisaedior = "/utils/Green_frente.png"
-        this.defultcontenedor()
-        break
-    }
+    this.selectedPosicion = 'Editar Frente'; // Por defecto, al seleccionar un color, se muestra el frente
+    this.updateCamisaEditor();
   }
 
   selectTalla(talla: string): void {
@@ -123,16 +102,11 @@ export class EditorComponent implements AfterViewInit {
       const editorShirt = this.editorShirtRef?.nativeElement;
       if (editorShirt) {
         const container = this.containerRef.nativeElement;
-
         const originalBorder = container.style.border;
-
         container.style.border = 'none';
-
         html2canvas(editorShirt).then(canvas => {
           const dataURL = canvas.toDataURL('image/png');
-
           container.style.border = originalBorder;
-
           this.selectedDiseño = dataURL;
           resolve();
         }).catch(err => {
@@ -147,7 +121,11 @@ export class EditorComponent implements AfterViewInit {
   }
 
   cambio(posicion: string): void {
-    this.selectedposicion = posicion
+    this.selectedPosicion = posicion;
+    this.updateCamisaEditor();
+  }
+
+  updateCamisaEditor(): void {
     const colorPositionMap: { [key: string]: { [key: string]: string } } = {
       white: {
         "Editar Frente": "/utils/blanca_frente.png",
@@ -171,7 +149,7 @@ export class EditorComponent implements AfterViewInit {
       },
       green: {
         "Editar Frente": "/utils/Green_frente.png",
-        "Editar Espalda": "/utils/Green_esplada.png",
+        "Editar Espalda": "/utils/Green_espalda.png",
         "Editar Costado": "/utils/Green_costado.png",
       },
       yellow: {
@@ -182,75 +160,67 @@ export class EditorComponent implements AfterViewInit {
     };
 
     const selectedPaths = colorPositionMap[this.selectedColor];
-    if (selectedPaths && selectedPaths[posicion]) {
-      this.camisaedior = selectedPaths[posicion];
-
-      this.x()
-
+    if (selectedPaths && selectedPaths[this.selectedPosicion]) {
+      this.camisaedior = selectedPaths[this.selectedPosicion];
+      this.applyContainerClass();
     } else {
-      console.error(`No image path found for color: ${this.selectedColor} and position: ${posicion}`);
+      console.error(`No se encontró la ruta de la imagen para el color: ${this.selectedColor} y la posición: ${this.selectedPosicion}`);
     }
   }
 
-  x() {
-    const posicion = this.selectedposicion
-    const color = this.selectedColor
+  applyContainerClass(): void {
+    const posicion = this.selectedPosicion;
+    const color = this.selectedColor;
 
-    //demas
-    if (posicion === "Editar Costado" && color != "white" && color != "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado');
-    } else if (posicion === "Editar Frente" && color != "white" && color != "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+    this.resetContainerClasses();
 
-    } else if (posicion === "Editar Espalda" && color != "white" && color != "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
-
-    }
-
-    //white
-    if (posicion === "Editar Costado" && color === "white") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-white');
-    } else if (posicion === "Editar Frente" && color === "white") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
-
-    } else if (posicion === "Editar Espalda" && color === "white") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
-    }
-
-    //black
-    if (posicion === "Editar Costado" && color === "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-black');
-    } else if (posicion === "Editar Frente" && color === "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
-
-    } else if (posicion === "Editar Espalda" && color === "black") {
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    if (color === "white") {
+      this.applyWhiteClasses(posicion);
+    } else if (color === "black") {
+      this.applyBlackClasses(posicion);
+    } else {
+      this.applyColorClasses(posicion);
     }
   }
 
-  defultcontenedor() {
+  resetContainerClasses(): void {
     this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
     this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-    this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
-
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda-white');
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda-black');
   }
 
+  applyWhiteClasses(posicion: string): void {
+    if (posicion === "Editar Costado") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-white');
+    } else if (posicion === "Editar Espalda") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    } else {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+    }
+  }
+
+  applyBlackClasses(posicion: string): void {
+    if (posicion === "Editar Costado") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-black');
+
+    } else if (posicion === "Editar Espalda") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    } else {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+    }
+  }
+
+  applyColorClasses(posicion: string): void {
+    if (posicion === "Editar Costado") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado');
+    } else if (posicion === "Editar Espalda") {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    } else {
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+    }
+  }
 }
