@@ -65,11 +65,45 @@
     height: auto;
     margin-top: 8px;
 }
-  #container {
-    border: 3px solid black;
-    width: 27%;
+  .container_default {
+    border: 3px solid red;
+    width: 29%;
     height: 60%;
-    margin-left: 2%;
+    margin: auto;
+    position: absolute;
+  }
+
+  .container_espalda {
+    border: 3px solid red;
+    width: 27%;
+    height: 90%;
+    position: absolute;
+  }
+
+  .container_costado {
+    border: 3px solid red;
+    width: 20%;
+    height: 60%;
+    margin: auto;
+    position: absolute;
+  }
+
+  .container_costado-white {
+    border: 3px solid red;
+    width: 22%;
+    height: 50%;
+    margin-bottom: 25%;
+    margin-left: 5%;
+    position: absolute;
+  }
+
+  .container_costado-black {
+    border: 3px solid red;
+    width: 22%;
+    height: 60%;
+    margin-top: 5%;
+    margin-bottom: 25%;
+    margin-right: 5%;
     position: absolute;
   }
 
@@ -94,8 +128,8 @@
   }
   .camisa{
     width: 50%;
-    height: auto
-    ;
+    height: auto;
+    margin: auto;
 }
 
 .Pedidos{

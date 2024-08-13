@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject, ChangeDetectorRef, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { ShopService } from '../../service/shop.service';
 import { KonvaService } from '../../service/konva.service';
+import { and } from 'firebase/firestore';
 
 @Component({
   selector: 'app-editor',
@@ -17,7 +18,7 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
-  constructor(private cdr: ChangeDetectorRef, private konvaService: KonvaService) {}
+  constructor(private cdr: ChangeDetectorRef, private konvaService: KonvaService, private renderer: Renderer2) { }
 
   colors: string[] = ['blue', 'yellow', 'green', 'grey', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
@@ -25,7 +26,8 @@ export class EditorComponent implements AfterViewInit {
   selectedColor: string = 'white';
   selectedTalla: string = '';
   selectedDiseño: string = '';
-  camisaposicion: string[] = ["Editar Frente" ,"Editar Costado" , "Editar Espalda"]
+  selectedposicion: string = "";
+  camisaposicion: string[] = ["Editar Frente", "Editar Costado", "Editar Espalda"]
   camisaedior: string = '/utils/blanca_frente.png';
   editingText = false;
   editText = '';
@@ -48,24 +50,30 @@ export class EditorComponent implements AfterViewInit {
 
   selectColor(color: string): void {
     this.selectedColor = color;
-    switch(color){
+    switch (color) {
       case "white":
         this.camisaedior = "/utils/blanca_frente.png"
+        this.defultcontenedor()
         break
       case "black":
         this.camisaedior = "/utils/Negro_Frente.png"
+        this.defultcontenedor()
         break
       case "blue":
         this.camisaedior = "/utils/Azul_Frente.png"
+        this.defultcontenedor()
         break
       case "grey":
         this.camisaedior = "/utils/Gris_frente.png"
+        this.defultcontenedor()
         break
-        case "yellow":
+      case "yellow":
         this.camisaedior = "/utils/Yellow_frente.png"
+        this.defultcontenedor()
         break
-        case "green":
+      case "green":
         this.camisaedior = "/utils/Green_frente.png"
+        this.defultcontenedor()
         break
     }
   }
@@ -139,6 +147,7 @@ export class EditorComponent implements AfterViewInit {
   }
 
   cambio(posicion: string): void {
+    this.selectedposicion = posicion
     const colorPositionMap: { [key: string]: { [key: string]: string } } = {
       white: {
         "Editar Frente": "/utils/blanca_frente.png",
@@ -162,7 +171,7 @@ export class EditorComponent implements AfterViewInit {
       },
       green: {
         "Editar Frente": "/utils/Green_frente.png",
-        "Editar Espalda": "/utils/Green_espalda.png",
+        "Editar Espalda": "/utils/Green_esplada.png",
         "Editar Costado": "/utils/Green_costado.png",
       },
       yellow: {
@@ -171,15 +180,77 @@ export class EditorComponent implements AfterViewInit {
         "Editar Costado": "/utils/Yellow_costado.png",
       }
     };
-  
+
     const selectedPaths = colorPositionMap[this.selectedColor];
     if (selectedPaths && selectedPaths[posicion]) {
       this.camisaedior = selectedPaths[posicion];
+
+      this.x()
+
     } else {
       console.error(`No image path found for color: ${this.selectedColor} and position: ${posicion}`);
     }
   }
-  
-  
+
+  x() {
+    const posicion = this.selectedposicion
+    const color = this.selectedColor
+
+    //demas
+    if (posicion === "Editar Costado" && color != "white" && color != "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado');
+    } else if (posicion === "Editar Frente" && color != "white" && color != "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+
+    } else if (posicion === "Editar Espalda" && color != "white" && color != "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+
+    }
+
+    //white
+    if (posicion === "Editar Costado" && color === "white") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-white');
+    } else if (posicion === "Editar Frente" && color === "white") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+
+    } else if (posicion === "Editar Espalda" && color === "white") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    }
+
+    //black
+    if (posicion === "Editar Costado" && color === "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-black');
+    } else if (posicion === "Editar Frente" && color === "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+
+    } else if (posicion === "Editar Espalda" && color === "black") {
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
+      this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
+      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
+    }
+  }
+
+  defultcontenedor() {
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
+    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
+    this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+
+  }
+
 }
- 
