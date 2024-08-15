@@ -48,7 +48,8 @@ export class EditorComponent implements AfterViewInit {
   private _compraService = inject(ShopService);
 
   ngAfterViewInit() {
-    this.initializeKonvaForCurrentView()
+    this.inicializacionKovan()
+    this.posiciondecamisas()
     this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
     this.cdr.detectChanges();
   }
@@ -169,12 +170,9 @@ export class EditorComponent implements AfterViewInit {
   cambio(posicion: string): void {
     this.selectedPosicion = posicion;
     this.cdr.detectChanges();
-    this.initializeKonvaForCurrentView()
+    this.posiciondecamisas()
   }
-  private initializeKonvaForCurrentView() {
-    this.konvaService.initializeKonva(this.containerRef.nativeElement);
-    this.konvaService.initializeKonva(this.containerRefCostado.nativeElement);
-    this.konvaService.initializeKonva(this.containerRefEspalda.nativeElement);
+  private posiciondecamisas() {
 
     if (this.selectedPosicion === 'Editar Frente') {
       this.editorShirtRef.nativeElement.style.display="flex"
@@ -190,4 +188,14 @@ export class EditorComponent implements AfterViewInit {
       this.editorShirtRefEspalda.nativeElement.style.display = 'flex';
     }
   }
+
+  private inicializacionKovan(){
+    if (this.containerRef && this.containerRefCostado && this.containerRefEspalda) {
+    this.konvaService.initializeKonva(this.containerRef.nativeElement);
+    this.konvaService.initializeKonva(this.containerRefCostado.nativeElement);
+    this.konvaService.initializeKonva(this.containerRefEspalda.nativeElement);
+  } else {
+    console.error('Uno o más contenedores de Konva no están definidos.');
+  }
+}
 }
