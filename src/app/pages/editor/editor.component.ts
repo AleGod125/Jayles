@@ -11,18 +11,25 @@ import { KonvaService } from '../../service/konva.service';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('editorShirtRefEspalda', { static: true }) editorShirtRefEspalda!: ElementRef<HTMLDivElement>;
+  @ViewChild('editorShirtRefCostado', { static: true }) editorShirtRefCostado!: ElementRef<HTMLDivElement>;
+
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('containerCostado', { static: true }) containerRefCostado!: ElementRef<HTMLDivElement>;
+  @ViewChild('containerRefEspalda', { static: true }) containerRefEspalda!: ElementRef<HTMLDivElement>;
+
+  
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private konvaService: KonvaService,
     private renderer: Renderer2
-  ) {}
+  ) { }
 
   colors: string[] = ['blue', 'yellow', 'green', 'grey', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
@@ -31,17 +38,22 @@ export class EditorComponent implements AfterViewInit {
   selectedDiseño: string = '';
   selectedPosicion: string = "Editar Frente";
   camisaposicion: string[] = ["Editar Frente", "Editar Costado", "Editar Espalda"]
-  camisaedior: string = '/utils/blanca_frente.png';
+  camisaediorFrente: string = '/utils/blanca_frente.png';
+  camisaediorEspalda: string = '/utils/Blanca_espalda.png';
+  camisaediorCpstado: string = '/utils/blanca_costado.png';
+
   editingText = false;
   editText = '';
 
   private _compraService = inject(ShopService);
 
   ngAfterViewInit() {
-    this.konvaService.initializeKonva(this.containerRef.nativeElement);
+    this.initializeKonvaForCurrentView()
     this.fileInputRef.nativeElement.addEventListener('change', this.onFileChange.bind(this));
     this.cdr.detectChanges();
   }
+
+
 
   private onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -53,8 +65,42 @@ export class EditorComponent implements AfterViewInit {
 
   selectColor(color: string): void {
     this.selectedColor = color;
-    this.selectedPosicion = 'Editar Frente'; // Por defecto, al seleccionar un color, se muestra el frente
-    this.updateCamisaEditor();
+    this.selectedPosicion = "Editar Frente"
+    switch (color) {
+      case 'white':
+        this.camisaediorFrente = '/utils/blanca_frente.png'
+        this.camisaediorEspalda = '/utils/Blanca_espalda.png'
+        this.camisaediorCpstado = '/utils/blanca_costado.png'
+        break
+      case 'black':
+        this.camisaediorFrente = '/utils/Negro_Frente.png'
+        this.camisaediorEspalda = '/utils/Negro_espalda.png'
+        this.camisaediorCpstado = '/utils/Negro_costado.png'
+    
+        break
+      case 'green':
+        this.camisaediorFrente = '/utils/Green_frente.png'
+        this.camisaediorEspalda = '/utils/Green_esplada.png'
+        this.camisaediorCpstado = '/utils/Green_costado.png'
+        break
+      case 'grey':
+        this.camisaediorFrente = '/utils/Gris_frente.png'
+        this.camisaediorEspalda = '/utils/Gris_espalda.png'
+        this.camisaediorCpstado = '/utils/Gris_costado.png'
+        break
+      case 'yellow':
+        this.camisaediorFrente = '/utils/Yellow_frente.png'
+        this.camisaediorEspalda = '/utils/Yellow_espalda.png'
+        this.camisaediorCpstado = '/utils/Yellow_costado.png'
+        break
+      case 'blue':
+        this.camisaediorFrente = '/utils/Azul_Frente.png'
+        this.camisaediorEspalda = '/utils/Azul_esplada.png'
+        this.camisaediorCpstado = '/utils/Azul_Costado.png'
+        break
+
+
+    }
   }
 
   selectTalla(talla: string): void {
@@ -122,105 +168,26 @@ export class EditorComponent implements AfterViewInit {
 
   cambio(posicion: string): void {
     this.selectedPosicion = posicion;
-    this.updateCamisaEditor();
+    this.cdr.detectChanges();
+    this.initializeKonvaForCurrentView()
   }
+  private initializeKonvaForCurrentView() {
+    this.konvaService.initializeKonva(this.containerRef.nativeElement);
+    this.konvaService.initializeKonva(this.containerRefCostado.nativeElement);
+    this.konvaService.initializeKonva(this.containerRefEspalda.nativeElement);
 
-  updateCamisaEditor(): void {
-    const colorPositionMap: { [key: string]: { [key: string]: string } } = {
-      white: {
-        "Editar Frente": "/utils/blanca_frente.png",
-        "Editar Espalda": "/utils/Blanca_espalda.png",
-        "Editar Costado": "/utils/blanca_costado.png",
-      },
-      black: {
-        "Editar Frente": "utils/Negro_Frente.png",
-        "Editar Espalda": "/utils/Negro_espalda.png",
-        "Editar Costado": "/utils/Negro_costado.png",
-      },
-      blue: {
-        "Editar Frente": "/utils/Azul_Frente.png",
-        "Editar Espalda": "/utils/Azul_esplada.png",
-        "Editar Costado": "/utils/Azul_Costado.png",
-      },
-      grey: {
-        "Editar Frente": "/utils/Gris_frente.png",
-        "Editar Espalda": "/utils/Gris_espalda.png",
-        "Editar Costado": "/utils/Gris_costado.png",
-      },
-      green: {
-        "Editar Frente": "/utils/Green_frente.png",
-        "Editar Espalda": "/utils/Green_espalda.png",
-        "Editar Costado": "/utils/Green_costado.png",
-      },
-      yellow: {
-        "Editar Frente": "/utils/Yellow_frente.png",
-        "Editar Espalda": "/utils/Yellow_espalda.png",
-        "Editar Costado": "/utils/Yellow_costado.png",
-      }
-    };
-
-    const selectedPaths = colorPositionMap[this.selectedColor];
-    if (selectedPaths && selectedPaths[this.selectedPosicion]) {
-      this.camisaedior = selectedPaths[this.selectedPosicion];
-      this.applyContainerClass();
-    } else {
-      console.error(`No se encontró la ruta de la imagen para el color: ${this.selectedColor} y la posición: ${this.selectedPosicion}`);
-    }
-  }
-
-  applyContainerClass(): void {
-    const posicion = this.selectedPosicion;
-    const color = this.selectedColor;
-
-    this.resetContainerClasses();
-
-    if (color === "white") {
-      this.applyWhiteClasses(posicion);
-    } else if (color === "black") {
-      this.applyBlackClasses(posicion);
-    } else {
-      this.applyColorClasses(posicion);
-    }
-  }
-
-  resetContainerClasses(): void {
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_default');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-white');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda-white');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_costado-black');
-    this.renderer.removeClass(this.containerRef.nativeElement, 'container_espalda-black');
-  }
-
-  applyWhiteClasses(posicion: string): void {
-    if (posicion === "Editar Costado") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-white');
-    } else if (posicion === "Editar Espalda") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
-    } else {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
-    }
-  }
-
-  applyBlackClasses(posicion: string): void {
-    if (posicion === "Editar Costado") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado-black');
-
-    } else if (posicion === "Editar Espalda") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
-    } else {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
-    }
-  }
-
-  applyColorClasses(posicion: string): void {
-    if (posicion === "Editar Costado") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_costado');
-    } else if (posicion === "Editar Espalda") {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_espalda');
-    } else {
-      this.renderer.addClass(this.containerRef.nativeElement, 'container_default');
+    if (this.selectedPosicion === 'Editar Frente') {
+      this.editorShirtRef.nativeElement.style.display="flex"
+      this.editorShirtRefCostado.nativeElement.style.display = 'none';
+      this.editorShirtRefEspalda.nativeElement.style.display = 'none';
+    } else if (this.selectedPosicion === 'Editar Costado') {
+      this.editorShirtRef.nativeElement.style.display="none"
+      this.editorShirtRefCostado.nativeElement.style.display = 'flex';
+      this.editorShirtRefEspalda.nativeElement.style.display = 'none';
+    } else if (this.selectedPosicion === 'Editar Espalda') {
+      this.editorShirtRef.nativeElement.style.display="none"
+      this.editorShirtRefCostado.nativeElement.style.display = 'none';
+      this.editorShirtRefEspalda.nativeElement.style.display = 'flex';
     }
   }
 }

@@ -7,32 +7,32 @@
           <img src="\utils\chevron-left.svg" alt="">
           Volver atras
         </button>
-    
-        <label for="file-upload" class="btn" >
-         <img src="\utils\image-fill.svg" alt="">
+
+        <label for="file-upload" class="btn">
+          <img src="\utils\image-fill.svg" alt="">
           Añadir Imagen
         </label>
         <input type="file" id="file-upload" #fileInput style="display: none;" />
-    
+
         <input type="text" [(ngModel)]="editText" *ngIf="editingText" (keyup.enter)="finishEdit()" class="btn">
         <button class="btn" (click)="startEdit()" *ngIf="!editingText">
           <img src="\utils\fonts.svg" alt="">
           Añadir texto</button>
       </div>
-      
+
     </div>
-   
+
     <div class="separador"></div>
 
-    
+
 
     <div class="fondo">
       <div class="colorSelector">
-        <button class="btn" *ngFor="let posicion of camisaposicion" (click)="cambio(posicion)" >{{posicion}}</button>
+        <button class="btn" *ngFor="let posicion of camisaposicion" (click)="cambio(posicion)">{{posicion}}</button>
       </div>
     </div>
 
-    
+
     <div class="separador"></div>
 
     <div class="fondo">
@@ -57,19 +57,31 @@
 
     <div class="separador"></div>
 
-   
 
-    <button class="Pedidos" routerLink="/pago" (click)="boton()" >Hacer pedido</button>
+
+    <button class="Pedidos" routerLink="/pago" (click)="boton()">Hacer pedido</button>
   </div>
 
   <div class="diseño">
     <h1>Personaliza tu diseño aquí</h1>
     <div class="diseño" style="width: 100%;">
+      
       <div class="editorShirtRef" #editorShirtRef>
-        <img src="{{camisaedior}}" alt="" class="camisa">
+        <img src="{{camisaediorFrente}}" alt="" class="camisa">
         <div #container class="container_default"></div>
       </div>
-      <button class="btnElminiar" (click)="clearCanvas()">Eliminar diseño</button>
+
+      <div  class="editorShirtRef" #editorShirtRefEspalda>
+        <img src="{{camisaediorEspalda}}" alt="" class="camisa">
+        <div #containerRefEspalda class="container_espalda"></div>
+      </div>
+
+      <div  class="editorShirtRef" #editorShirtRefCostado>
+        <img src="{{camisaediorCpstado}}" alt="" class="camisa">
+        <div #containerCostado class="container_costado" [ngClass]="{'container_costado-white': selectedPosicion === 'Editar Costado' && selectedColor === 'white',
+        'container_costado-black': selectedPosicion === 'Editar Costado' && selectedColor === 'black'
+      }"></div>
+      </div>
     </div>
+
   </div>
-  
