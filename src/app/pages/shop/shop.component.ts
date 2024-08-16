@@ -19,17 +19,19 @@ export class ShopComponent implements OnInit  {
   editingText = false;
   editText = '11';
   mayor: string = "+10";
-  precioUnitario = 25000;
-  listaCompra: { color: string; talla: string; img: string; quantity: number; price: number }[] = [];
+  precioUnitario = 15000;
+  listaCompra: { color: string; talla: string; img: string[]; quantity: number; price: number; estanpado:string }[] = [];
   subtotal: number = 0;
   
-  constructor(private shopService: ShopService) {}
 
   ngOnInit() {
-    this.shopService.compras$.subscribe(compras => {
+    this._compraService.compras$.subscribe(compras => {
       this.listaCompra = compras;
       this.updateSubtotal()
+     this.listaCompra.forEach(compra => {
+      console.log('Imágenes de la compra:', compra.img);
     });
+  });
   }
 
   ElminarTarea(index: number) {
@@ -45,7 +47,7 @@ export class ShopComponent implements OnInit  {
       this.ElminarTarea(index);
     } else {
       const compra = this.listaCompra[index];
-      const newPrice = 25000 * selectedValue; // Assuming base price is 25000
+      const newPrice = 15000 * selectedValue; 
       compra.quantity = selectedValue;
       compra.price = newPrice;
       this._compraService.actualizarCompra(index, selectedValue, newPrice);

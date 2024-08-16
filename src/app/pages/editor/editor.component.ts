@@ -22,31 +22,32 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('containerCostado', { static: true }) containerRefCostado!: ElementRef<HTMLDivElement>;
   @ViewChild('containerRefEspalda', { static: true }) containerRefEspalda!: ElementRef<HTMLDivElement>;
 
-  
+
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private konvaService: KonvaService,
-    private renderer: Renderer2
   ) { }
 
   colors: string[] = ['blue', 'yellow', 'green', 'grey', 'white', 'black'];
   Tallas: string[] = ['S', 'M', 'L', 'XL'];
   selectedColor: string = 'white';
   selectedTalla: string = '';
-  selectedDiseño: string = '';
+  selectedDiseño: string[] = [];
   selectedPosicion: string = "Editar Frente";
   camisaposicion: string[] = ["Editar Frente", "Editar Costado", "Editar Espalda"]
   camisaediorFrente: string = '/utils/blanca_frente.png';
   camisaediorEspalda: string = '/utils/Blanca_espalda.png';
   camisaediorCpstado: string = '/utils/blanca_costado.png';
 
+  nameEstanpado: string = "Diseño Perzonalizado"
+
   editingText = false;
   editText = '';
 
   private _compraService = inject(ShopService);
-  private _router  = inject(Router);
+  private _router = inject(Router);
 
 
   ngAfterViewInit() {
@@ -79,7 +80,7 @@ export class EditorComponent implements AfterViewInit {
         this.camisaediorFrente = '/utils/Negro_Frente.png'
         this.camisaediorEspalda = '/utils/Negro_espalda.png'
         this.camisaediorCpstado = '/utils/Negro_costado.png'
-    
+
         break
       case 'green':
         this.camisaediorFrente = '/utils/Green_frente.png'
@@ -110,9 +111,6 @@ export class EditorComponent implements AfterViewInit {
     this.selectedTalla = talla;
   }
 
-  selectdiseño(diseño: string): void {
-    this.selectedDiseño = diseño;
-  }
 
   startEdit(): void {
     this.editingText = true;
@@ -135,46 +133,69 @@ export class EditorComponent implements AfterViewInit {
   }
 
   agregarCompra() {
-    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 25000);
+    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 15000, this.nameEstanpado);
     this.selectedTalla = '';
     this.selectedColor = '';
-    this.selectedDiseño = '';
+    console.log("imagenes enviadas: ", this.selectedDiseño)
+    
+      this._router.navigate(['/pago']);
   }
 
   async boton() {
-    if(this.selectedTalla === ""){
+    if (this.selectedTalla === "") {
       alert("Que no se el olvide Sleecionar la talla!!!")
-      return
-    }else {
-      await this.captureEditorShirt();
-      this.agregarCompra();
-      this._router.navigate(['/pago']);
+    } else {
+      this.captureEditorShirt();
+      
     }
-    
+
   }
 
   captureEditorShirt(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const editorShirt = this.editorShirtRef?.nativeElement;
-      if (editorShirt) {
-        const container = this.containerRef.nativeElement;
-        const originalBorder = container.style.border;
-        container.style.border = 'none';
-        html2canvas(editorShirt).then(canvas => {
-          const dataURL = canvas.toDataURL('image/png');
-          container.style.border = originalBorder;
-          this.selectedDiseño = dataURL;
-          resolve();
-        }).catch(err => {
-          container.style.border = originalBorder;
-          reject(err);
-        });
-      } else {
-        console.error('El elemento editorShirt no está definido.');
-        reject('El elemento editorShirt no está definido.');
+    return new Promise(async (resolve, reject) => {
+      try {
+        const containers = [
+          { ref: this.editorShirtRef, container: this.containerRef },
+          { ref: this.editorShirtRefCostado, container: this.containerRefCostado },
+          { ref: this.editorShirtRefEspalda, container: this.containerRefEspalda }
+        ];
+
+        this.selectedDiseño = [];
+
+        for (const { ref, container } of containers) {
+          const editorShirt = ref?.nativeElement;
+          if (editorShirt) {
+            const originalBorder = container.nativeElement.style.border;
+
+            container.nativeElement.style.border = 'none';
+            this.editorShirtRef.nativeElement.style.display = "flex"
+            this.editorShirtRefCostado.nativeElement.style.display = "flex"
+            this.editorShirtRefEspalda.nativeElement.style.display = "flex"
+
+            const canvas = await html2canvas(editorShirt);
+            const dataURL = canvas.toDataURL('image/png');
+            this.selectedDiseño.push(dataURL);
+            
+            if(this.selectedDiseño.length===3){
+              this.agregarCompra()
+            }
+
+            this.posiciondecamisas()
+
+            container.nativeElement.style.border = originalBorder;
+          } else {
+            console.error('Uno de los elementos editorShirt no está definido.');
+          }
+        }
+
+        resolve();
+      } catch (err) {
+        console.error('Error al capturar el diseño:', err);
+        reject(err);
       }
     });
   }
+
 
   cambio(posicion: string): void {
     this.selectedPosicion = posicion;
@@ -184,27 +205,28 @@ export class EditorComponent implements AfterViewInit {
   private posiciondecamisas() {
 
     if (this.selectedPosicion === 'Editar Frente') {
-      this.editorShirtRef.nativeElement.style.display="flex"
+      this.editorShirtRef.nativeElement.style.display = "flex"
       this.editorShirtRefCostado.nativeElement.style.display = 'none';
       this.editorShirtRefEspalda.nativeElement.style.display = 'none';
     } else if (this.selectedPosicion === 'Editar Costado') {
-      this.editorShirtRef.nativeElement.style.display="none"
+      this.editorShirtRef.nativeElement.style.display = "none"
       this.editorShirtRefCostado.nativeElement.style.display = 'flex';
       this.editorShirtRefEspalda.nativeElement.style.display = 'none';
     } else if (this.selectedPosicion === 'Editar Espalda') {
-      this.editorShirtRef.nativeElement.style.display="none"
+      this.editorShirtRef.nativeElement.style.display = "none"
       this.editorShirtRefCostado.nativeElement.style.display = 'none';
       this.editorShirtRefEspalda.nativeElement.style.display = 'flex';
     }
   }
 
-  private inicializacionKovan(){
+  private inicializacionKovan() {
     if (this.containerRef && this.containerRefCostado && this.containerRefEspalda) {
-    this.konvaService.initializeKonva(this.containerRef.nativeElement);
-    this.konvaService.initializeKonva(this.containerRefCostado.nativeElement);
-    this.konvaService.initializeKonva(this.containerRefEspalda.nativeElement);
-  } else {
-    console.error('Uno o más contenedores de Konva no están definidos.');
+      this.konvaService.initializeKonva(this.containerRef.nativeElement);
+      this.konvaService.initializeKonva(this.containerRefCostado.nativeElement);
+      this.konvaService.initializeKonva(this.containerRefEspalda.nativeElement);
+    } else {
+      console.error('Uno o más contenedores de Konva no están definidos.');
+    }
   }
-}
+
 }

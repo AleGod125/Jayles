@@ -2,14 +2,29 @@
     <h1>Carrito de compra</h1>
     <h3 *ngIf="listaCompra.length === 0">Aun no haz agrado nada al corrito !!!</h3>
     <div class="cardshop" *ngFor="let compra of listaCompra; let i = index">
-        <div class="imapre">
-            <img [src]="compra.img" alt="" class="img">
-        </div>
+        
+      <div class="imapre">
+        <div id="carouselExampleInterval{{i}}" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let image of compra.img; let first = first" [class.active]="first">
+              <img [src]="image" class="d-block w-100" alt="Image">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carouselExampleInterval' + i" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carouselExampleInterval' + i" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>      </div>
+  
         <div class="infoshop">
             <h3>Suéter con diseño personalizado</h3>
             <p>Color: {{compra.color}}</p>
             <p>Talla: {{compra.talla}}</p>
-            <p>Diseño: </p>
+            <p>Diseño:{{" "+compra.estanpado}} </p>
             <h1 class="Precio">{{compra.price | currency:'USD':true}}</h1>
             <div class="quantity">
                 <input 
@@ -31,10 +46,13 @@
                 <button class="btnElminar" (click)="ElminarTarea(i)">Eliminar</button>
             </div>
         </div>
+        
     </div>
 
-    <button style="margin-bottom: 240px;" class="Pedidos" routerLink="/compra">Comprar</button>
+    <button style="margin-bottom: 240px;" class="Pedidos" routerLink="/compra" *ngIf="listaCompra.length >0">Comprar</button>
+    <button style="margin-bottom: 240px; background-color: darkgray;" class="Pedidos"*ngIf="listaCompra.length ===0">Comprar</button>
 
+  
     <div class="subTotal">
         <h1>subTotal: {{subtotal | currency:'USD':true}}</h1>
     </div>

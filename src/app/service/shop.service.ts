@@ -10,13 +10,13 @@ export class ShopService {
   private comprasSubject = new BehaviorSubject(this.getCompra());
   compras$ = this.comprasSubject.asObservable();
 
-  getCompra(): { color: string; talla: string; img: string; quantity: number; price: number }[] {
+  getCompra(): { color: string; talla: string; img: string[]; quantity: number; price: number; estanpado:string }[] {
     return JSON.parse(localStorage.getItem(this.localStorageKey) as string) || [];
   }
 
-  agregarCompra(color: string, talla: string, img: string, quantity: number, price: number): void {
+  agregarCompra(color: string, talla: string, img: string[], quantity: number, price: number, estanpado:string): void {
     const compra = this.getCompra();
-    compra.push({ color, talla, img, quantity, price });
+    compra.push({ color, talla, img, quantity, price, estanpado });
     localStorage.setItem(this.localStorageKey, JSON.stringify(compra));
     this.comprasSubject.next(compra);
   }
