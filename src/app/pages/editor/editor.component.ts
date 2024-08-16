@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, inject, ChangeDetectorRef, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { ShopService } from '../../service/shop.service';
 import { KonvaService } from '../../service/konva.service';
@@ -46,6 +46,8 @@ export class EditorComponent implements AfterViewInit {
   editText = '';
 
   private _compraService = inject(ShopService);
+  private _router  = inject(Router);
+
 
   ngAfterViewInit() {
     this.inicializacionKovan()
@@ -140,8 +142,15 @@ export class EditorComponent implements AfterViewInit {
   }
 
   async boton() {
-    await this.captureEditorShirt();
-    this.agregarCompra();
+    if(this.selectedTalla === ""){
+      alert("Que no se el olvide Sleecionar la talla!!!")
+      return
+    }else {
+      await this.captureEditorShirt();
+      this.agregarCompra();
+      this._router.navigate(['/pago']);
+    }
+    
   }
 
   captureEditorShirt(): Promise<void> {

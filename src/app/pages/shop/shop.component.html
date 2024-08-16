@@ -1,5 +1,6 @@
 <div class="Contenedor">
     <h1>Carrito de compra</h1>
+    <h3 *ngIf="listaCompra.length === 0">Aun no haz agrado nada al corrito !!!</h3>
     <div class="cardshop" *ngFor="let compra of listaCompra; let i = index">
         <div class="imapre">
             <img [src]="compra.img" alt="" class="img">

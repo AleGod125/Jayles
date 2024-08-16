@@ -1,8 +1,7 @@
 import { Component, OnInit, AfterViewInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
-import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
-import { listAll } from 'firebase/storage';
+import { FormsModule } from '@angular/forms'; 
+import { FirebaseService } from '../../service/firebase.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -14,23 +13,17 @@ import { listAll } from 'firebase/storage';
 export class CatalogoComponent implements  OnInit {
   Caralogo: string = "Catalogo";
   file!: File;
-  images = signal<{url: string, alt: string}[]>([]);
   searchTerm = signal<string>('');
 
-  private readonly _storage = inject(Storage);
+  
+  private _FirebaseStorage = inject(FirebaseService);
+  images = this._FirebaseStorage.getCatalogoImages(); 
+
 
 
 
   async ngOnInit(): Promise<void> {
-    const storageRef = ref(this._storage, 'catalogo');
-    const images = await listAll(storageRef);
-    
-    const imageUrls = await Promise.all(images.items.map(async (itemRef) => {
-      const url = await getDownloadURL(itemRef);
-      return { url, alt: itemRef.name };
-    }));
-
-    this.images.set(imageUrls);
+    this._FirebaseStorage.listImages('catalogo')
   }
 
   getFilteredImages() {
