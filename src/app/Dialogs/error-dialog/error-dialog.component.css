@@ -1,0 +1,22 @@
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 16px;
+}
+
+.icon{
+    width: 5rem; 
+    height: 5rem;
+    border-width: 0.3rem; 
+    color: red;
+}
+    
+.dialog-content {
+    white-space: pre-line;
+    margin: auto;
+    text-align: center;
+    font-size: 16px;
+  }
+  

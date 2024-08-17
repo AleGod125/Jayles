@@ -5,6 +5,9 @@ import { Router, RouterLink } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { ShopService } from '../../service/shop.service';
 import { KonvaService } from '../../service/konva.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogLoadingComponent } from '../../Dialogs/dialog-loading/dialog-loading.component';
+import { ErrorDialogComponent } from '../../Dialogs/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -17,12 +20,9 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('editorShirtRef', { static: true }) editorShirtRef!: ElementRef<HTMLDivElement>;
   @ViewChild('editorShirtRefEspalda', { static: true }) editorShirtRefEspalda!: ElementRef<HTMLDivElement>;
   @ViewChild('editorShirtRefCostado', { static: true }) editorShirtRefCostado!: ElementRef<HTMLDivElement>;
-
   @ViewChild('container', { static: true }) containerRef!: ElementRef<HTMLDivElement>;
   @ViewChild('containerCostado', { static: true }) containerRefCostado!: ElementRef<HTMLDivElement>;
   @ViewChild('containerRefEspalda', { static: true }) containerRefEspalda!: ElementRef<HTMLDivElement>;
-
-
   @ViewChild('fileInput', { static: true }) fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -40,14 +40,15 @@ export class EditorComponent implements AfterViewInit {
   camisaediorFrente: string = '/utils/blanca_frente.png';
   camisaediorEspalda: string = '/utils/Blanca_espalda.png';
   camisaediorCpstado: string = '/utils/blanca_costado.png';
-
   nameEstanpado: string = "Diseño Perzonalizado"
-
   editingText = false;
   editText = '';
+  dialogRef: any
 
   private _compraService = inject(ShopService);
   private _router = inject(Router);
+  readonly dialog = inject(MatDialog);
+
 
 
   ngAfterViewInit() {
@@ -57,7 +58,19 @@ export class EditorComponent implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
+  openDialog() {
+    this.dialogRef = this.dialog.open(DialogLoadingComponent);
 
+    this.dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  showErrorDialog(errorMessage: string) {
+    this.dialog.open(ErrorDialogComponent, {
+      data: { Mensaje: errorMessage }
+    });
+  }
 
   private onFileChange(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -133,20 +146,28 @@ export class EditorComponent implements AfterViewInit {
   }
 
   agregarCompra() {
-    this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 15000, this.nameEstanpado);
-    this.selectedTalla = '';
-    this.selectedColor = '';
-    console.log("imagenes enviadas: ", this.selectedDiseño)
-    
+    try {
+      this._compraService.agregarCompra(this.selectedColor, this.selectedTalla, this.selectedDiseño, 1, 15000, this.nameEstanpado);
+      this.selectedTalla = '';
+      this.selectedColor = '';
       this._router.navigate(['/pago']);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        this.showErrorDialog("Tu Carrito está lleno!!! \n Por favor, termina tus compras pendientes para poder continuar.");
+      } else {
+        console.error('Error inesperado:', error);
+        alert('Ocurrió un error inesperado al intentar guardar la compra.');
+      }
+    }
   }
+  
 
   async boton() {
     if (this.selectedTalla === "") {
-      alert("Que no se el olvide Sleecionar la talla!!!")
+      this.showErrorDialog("Señecciona una talla antes de continuar!!!");
     } else {
       this.captureEditorShirt();
-      
+      this.openDialog();
     }
 
   }
@@ -178,6 +199,7 @@ export class EditorComponent implements AfterViewInit {
             
             if(this.selectedDiseño.length===3){
               this.agregarCompra()
+              this.dialogRef.close();
             }
 
             this.posiciondecamisas()

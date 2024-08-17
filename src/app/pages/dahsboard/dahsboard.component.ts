@@ -2,6 +2,8 @@ import { Component, AfterViewInit, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FirebaseService } from '../../service/firebase.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogLoadingComponent } from '../../Dialogs/dialog-loading/dialog-loading.component';
 
 @Component({
   selector: 'app-dahsboard',
@@ -10,35 +12,19 @@ import { FirebaseService } from '../../service/firebase.service';
   templateUrl: './dahsboard.component.html',
   styleUrls: ['./dahsboard.component.css']
 })
-export class DahsboardComponent implements AfterViewInit, OnInit {
+export class DahsboardComponent implements AfterViewInit {
   Catalogo: string = "Catalogo";
   file!: File;
 
   private _FirebaseStorage = inject(FirebaseService);
+  readonly dialog = inject(MatDialog);
+
   catalogoImages = this._FirebaseStorage.getCatalogoImages();
   promocionesImages = this._FirebaseStorage.getPromocionesImages();
 
-  changeInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
-      this.file = input.files[0];
-      this.uploadFile();
-    }
-  }
-
-  uploadFile(): void {
-    this._FirebaseStorage.uploadImage(this.file, 'catalogo')
-      .then(() => {
-        this._FirebaseStorage.listImages('catalogo');
-      });
-  }
-
-  async ngOnInit(): Promise<void> {
-    await this._FirebaseStorage.listImages('promociones');
-    await this._FirebaseStorage.listImages('catalogo');
-  }
-
   ngAfterViewInit(): void {
+    this.openDialog()
+    this.firebase()
     const carouselElement = document.querySelector('#carouselExampleSlidesOnly');
     if (carouselElement) {
       new (window as any).bootstrap.Carousel(carouselElement, {
@@ -46,4 +32,26 @@ export class DahsboardComponent implements AfterViewInit, OnInit {
       });
     }
   }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogLoadingComponent);
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, 3000);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  
+
+
+  firebase() {
+     this._FirebaseStorage.listImages('promociones');
+     this._FirebaseStorage.listImages('catalogo');
+
+  }
+
+
 }

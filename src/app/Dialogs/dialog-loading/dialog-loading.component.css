@@ -1,0 +1,13 @@
+.contenedor{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.spinner-large {
+    width: 3rem; 
+    height: 3rem;
+    border-width: 0.3rem; 
+  }
+  

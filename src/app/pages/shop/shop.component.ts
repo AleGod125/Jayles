@@ -28,9 +28,6 @@ export class ShopComponent implements OnInit  {
     this._compraService.compras$.subscribe(compras => {
       this.listaCompra = compras;
       this.updateSubtotal()
-     this.listaCompra.forEach(compra => {
-      console.log('Imágenes de la compra:', compra.img);
-    });
   });
   }
 
