@@ -1,5 +1,4 @@
 body{
-    background-color: lightgray;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,6 +6,7 @@ body{
 }
 
 .info{
+    background-color: lightgray;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -37,6 +37,10 @@ input, select{
 .inputL{
     width: 50%;
     height: auto;
+}
+
+.invalid{
+    border: 2px solid red;
 }
 
 .x{

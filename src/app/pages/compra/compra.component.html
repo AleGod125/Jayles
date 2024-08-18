@@ -1,46 +1,47 @@
 <body>
     <div class="info">
-        <h1>Infromacion y direccion</h1>
-        <div class="names">
-            <input type="text" class="inputNames" placeholder="Nombre Completo">
-            <input type="text" class="inputNames" placeholder="Apellidos Completo">
-        </div>
-        <input type="number" placeholder="Numero Telefonico" class="inputL">
-        <div class="x">
-            <label for="">Ciudad</label>
-            <select name="Ciudad" style=" margin: 16px; margin-left: 0; margin-right: 0;">
-                <option></option>
-                <option>Barranquilla</option>
-                <option>Soledad</option>
-            </select>
-        </div>
-
-        <input type="text" placeholder="Barrio" class="inputL">
-        <div class="x">
-            <label for="">Calle/Número/Apartamento</label>
-            <input type="text" placeholder="Dirrecion" style=" margin: 16px; margin-left: 0; margin-right: 0;">
-        </div>
+      <h1>Información y dirección</h1>
+      <div class="names">
+        <input id="nombre" type="text" class="inputNames" [ngClass]="{'invalid': (!formValid['nombre'] && (formTouched['nombre'] || formSubmitted))}" placeholder="Nombre Completo" (blur)="onFieldBlur('nombre')">
+        <input id="apellidos" type="text" class="inputNames" [ngClass]="{'invalid': (!formValid['apellidos'] && (formTouched['apellidos'] || formSubmitted))}" placeholder="Apellidos Completo" (blur)="onFieldBlur('apellidos')">
+      </div>
+      <input id="telefono" type="number" [ngClass]="{'invalid': (!formValid['telefono'] && (formTouched['telefono'] || formSubmitted))}" placeholder="Número Telefónico" class="inputL" (blur)="onFieldBlur('telefono')">
+      <div class="x">
+        <label for="ciudad">Ciudad</label>
+        <select id="ciudad" name="Ciudad" [ngClass]="{'invalid': (!formValid['ciudad'] && (formTouched['ciudad'] || formSubmitted))}" style="margin: 16px; margin-left: 0; margin-right: 0;" (blur)="onFieldBlur('ciudad')">
+          <option></option>
+          <option>Barranquilla</option>
+          <option>Soledad</option>
+        </select>
+      </div>
+  
+      <input id="barrio" type="text" [ngClass]="{'invalid': (!formValid['barrio'] && (formTouched['barrio'] || formSubmitted))}" placeholder="Barrio" class="inputL" (blur)="onFieldBlur('barrio')">
+      <div class="x">
+        <label for="direccion">Calle/Número/Apartamento</label>
+        <input id="direccion" type="text" [ngClass]="{'invalid': (!formValid['direccion'] && (formTouched['direccion'] || formSubmitted))}" placeholder="Dirección" style="margin: 16px; margin-left: 0; margin-right: 0; margin-bottom: 34px;" (blur)="onFieldBlur('direccion')">
+      </div>
     </div>
-
+  
     <div class="separador"></div>
-
+  
     <div class="metodosPagos">
-        <h1>Selecicone su metodo de pago</h1>
-        <div class="botonesPagos">
-            <button class="metodo">
-                <img src="\utils\nequi-colombia-svgrepo-com - copia.svg" alt="" style="width: 25%; height: auto;">
-                Nequi</button>
-
-            <button class="metodo">
-                <img src="iconsDashboard\cart.svg" alt="" style="width: 20%; height: auto;">
-                Contra Entrega</button>
-
-            <button class="metodo">
-                <img src="/utils/geo-alt-fill.svg" alt="" style="width: 15%; height: auto;">
-                Recogelo tu mismo</button>
-
-        </div>
-
+      <h1>Seleccione su método de pago</h1>
+      <div class="botonesPagos">
+        <button class="metodo" (click)="seleccionarMetodo('Nequi')">
+          <img src="\utils\nequi-colombia-svgrepo-com - copia.svg" alt="" style="width: 25%; height: auto;">
+          Nequi
+        </button>
+  
+        <button class="metodo" (click)="seleccionarMetodo('Contra Entrega')">
+          <img src="iconsDashboard\cart.svg" alt="" style="width: 20%; height: auto;">
+          Contra Entrega
+        </button>
+  
+        <button class="metodo" (click)="seleccionarMetodo('Recogelo tu mismo')">
+          <img src="/utils/geo-alt-fill.svg" alt="" style="width: 15%; height: auto;">
+          Recógelo tú mismo
+        </button>
+      </div>
     </div>
-
-</body>
+  </body>
+  

@@ -64,8 +64,7 @@ export class ShopComponent implements OnInit {
 
   finishEdit( index: number): void {
     this.editingText = false;
- 
-  
+    this.mayor = this.editText;
     const numericValue = parseInt(this.editText);
     if (numericValue > 10) {
       this.selectedValue = this.editText
