@@ -1,30 +1,53 @@
-body{
-    background-color: rgb(247, 246, 246);
+body {
+  background-color: rgb(247, 246, 246);
 }
 
-
-.carousel-inner img {
+@media (max-width: 769px) {
+  .carousel-inner img {
     margin-top: 2%;
-    max-height: 60vh; 
-    object-fit: cover; 
-}
+    height: 50vh;
+  }
 
-.puclicidad {
+  .publicidad {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+  }
 
-@media screen and (max-width: 900px) {
-    .puclicidad {
-        flex-direction: column;
-    }
-}
-
-
-.publicidad {
+  .pu {
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: space-around;
+    background-color: white;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+    border-radius: 20px;
+  }
+
+  .truck {
+    background-color: rgb(228, 228, 228);
+    padding: 10px;
+    clip-path: circle(40%);
+    width: 22%;
+  }
+
+  .Catalogo{
+    font-size: 32px;
+
+  }
+}
+
+@media (min-width: 769px) and (min-width: 1019px) {
+  .carousel-inner img {
+    margin-top: 2%;
+    height: auto;
+  }
+
+  .publicidad {
+    display: flex;
+    justify-content: center;
     flex-wrap: wrap;
   }
 
@@ -42,119 +65,129 @@ body{
     background-color: #fff;
   }
 
-  .pu svg {
-    margin-bottom: 15px;
-  }
-
-  .pu-text {
-    margin-top: 15px;
-  }
-
-
-
-.truck {
+  .truck {
     background-color: rgb(228, 228, 228);
     padding: 24px;
     clip-path: circle(40%);
     width: auto;
     height: auto;
+  }
+
 }
 
+.Catalogo{
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ text-align: center;
+ font: bolder;
+ font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+
+
+
+
+.pu-text {
+  margin-top: 15px;
+}
+
+
+
 .textTitle {
-    background-color: rgba(0, 0, 0, 0.637);
-    width: 30%;
-    margin: 25px auto 0;
-    border-radius: 15px;
-    padding: 8px;
+  background-color: rgba(0, 0, 0, 0.637);
+  width: 30%;
+  margin: 25px auto 0;
+  border-radius: 15px;
+  padding: 8px;
 }
 
 
 .textsub {
-    background-color: rgba(0, 0, 0, 0.637);
-    width: 40%;
-    margin: -1px auto 0;
-    border-radius: 15px;
-    padding: 8px;
+  background-color: rgba(0, 0, 0, 0.637);
+  width: 40%;
+  margin: -1px auto 0;
+  border-radius: 15px;
+  padding: 8px;
 }
 
 .image-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; 
-  }
-  
-  .image-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 200px; 
-    padding: 10px;
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    text-align: center;
-    background-color: #fff;
-  }
-  
-  .image-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  
-  .pagination button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-  .personalizarcamisas {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 32px;
-    border-radius: 20px;
-    background-image: url("https://cdn.latostadora.com/img/designtoollandings/tshirts/es/mainbanner.desktop.webp");
-    background-size: cover;
-    /* Ajustar la imagen para que cubra todo el contenedor */
-    background-position: center;
-    /* Centrar la imagen en el contenedor */
-    box-shadow: 0 -1px 10px rgba(0, 0, 0, .7);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.image-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.image-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.personalizarcamisas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 32px;
+  border-radius: 20px;
+  background-image: url("https://cdn.latostadora.com/img/designtoollandings/tshirts/es/mainbanner.desktop.webp");
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, .7);
 }
 
 .divbutom {
-    background-color: rgba(255, 255, 255, 0.685);
-    padding: 16px;
-    border-radius: 20px;
-    box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
-    margin-left: 65%;
-    margin-top: 20%;
-    margin-bottom: 3%;
+  background-color: rgba(255, 255, 255, 0.685);
+  padding: 16px;
+  border-radius: 20px;
+  box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
+  margin-left: 65%;
+  margin-top: 20%;
+  margin-bottom: 3%;
 }
 
 .btnperzonalizar {
-    margin-top: 24px;
-    border: 2px solid red;
-    border-radius: 8px;
-    background-color: white;
-    padding: 8px;
-    color: red;
-    font-weight: bold;
-    box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
+  margin-top: 24px;
+  border: 2px solid red;
+  border-radius: 8px;
+  background-color: white;
+  padding: 8px;
+  color: red;
+  font-weight: bold;
+  box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
 }
 
 .contactos {

@@ -23,7 +23,7 @@ export class DahsboardComponent implements AfterViewInit {
   promocionesImages = this._FirebaseStorage.getPromocionesImages();
 
   ngAfterViewInit(): void {
-    this.openDialog()
+   // this.openDialog()
     this.firebase()
     const carouselElement = document.querySelector('#carouselExampleSlidesOnly');
     if (carouselElement) {

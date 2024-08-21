@@ -5,6 +5,17 @@
     align-items: center;
     margin-left: 5%;
 }
+.a{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.title{
+    margin: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 
 .navbarcom{
     margin-right: 5%;
@@ -26,3 +37,24 @@
 .btnNatvar:hover{
     background-color:lightgray;
 }
+.btnmenu{
+    margin: 16px;
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font: bold;
+    border: 1px solid black;
+    border-radius: 16px;
+
+}
+
+@media (max-width: 769px) {
+    .navbarcom {
+        display: none;
+    }
+}
+@media (min-width: 769px) and (min-width: 1019px) {
+    .navbarcom_mobile{
+        display: none;
+    }
+}
+
