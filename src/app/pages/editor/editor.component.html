@@ -7,20 +7,26 @@
           <img src="\utils\chevron-left.svg" alt="">
           Volver atras
         </button>
-
+    
         <label for="file-upload" class="btn">
           <img src="\utils\image-fill.svg" alt="">
           Añadir Imagen
         </label>
         <input type="file" id="file-upload" #fileInput style="display: none;" />
-
+    
         <input type="text" [(ngModel)]="editText" *ngIf="editingText" (keyup.enter)="finishEdit()" class="btn">
         <button class="btn" (click)="startEdit()" *ngIf="!editingText">
           <img src="\utils\fonts.svg" alt="">
-          Añadir texto</button>
+          Añadir texto
+        </button>
+    
+        <div class="rangue">
+          <input type="range" class="rangebar" id="curveControl" [(ngModel)]="rangeValue" min="-1000" max="1000">
+          <input type="text" class="ranguetext" [(ngModel)]="rangeValue" maxlength="1">
+        </div>
       </div>
-
     </div>
+    
 
     <div class="separador"></div>
 

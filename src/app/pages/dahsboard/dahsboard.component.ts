@@ -14,16 +14,15 @@ import { DialogLoadingComponent } from '../../Dialogs/dialog-loading/dialog-load
 })
 export class DahsboardComponent implements AfterViewInit {
   Catalogo: string = "Catalogo";
-  file!: File;
-
+  currentPage: number = 1;
+  itemsPerPage: number = 12;
   private _FirebaseStorage = inject(FirebaseService);
   readonly dialog = inject(MatDialog);
-
-  catalogoImages = this._FirebaseStorage.getCatalogoImages();
+catalogoImages = this._FirebaseStorage.getCatalogoImages();
   promocionesImages = this._FirebaseStorage.getPromocionesImages();
 
   ngAfterViewInit(): void {
-   // this.openDialog()
+    this.openDialog()
     this.firebase()
     const carouselElement = document.querySelector('#carouselExampleSlidesOnly');
     if (carouselElement) {
@@ -44,14 +43,30 @@ export class DahsboardComponent implements AfterViewInit {
       console.log(`Dialog result: ${result}`);
     });
   }
-  
+
 
 
   firebase() {
-     this._FirebaseStorage.listImages('promociones');
-     this._FirebaseStorage.listImages('catalogo');
+    this._FirebaseStorage.listImages('promociones');
+    this._FirebaseStorage.listImages('catalogo');
 
   }
+  get paginatedImages() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return 
+  }
 
+  nextPage() {
+    if ((this.currentPage * this.itemsPerPage) < this.catalogoImages.length) {
+      this.currentPage++;
+    }
+  }
 
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 }
+

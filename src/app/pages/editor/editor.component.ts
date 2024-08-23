@@ -45,6 +45,8 @@ export class EditorComponent implements AfterViewInit {
   editText = '';
   dialogRef: any
 
+  rangeValue: string = '0';
+
   private _compraService = inject(ShopService);
   private _router = inject(Router);
   readonly dialog = inject(MatDialog);

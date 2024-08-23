@@ -22,6 +22,8 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    padding: 16px;
     margin: 16px;
     border-radius: 20px;
   }
@@ -35,7 +37,23 @@ body {
 
   .Catalogo{
     font-size: 32px;
+  }
 
+  .divbutom {
+    background-color: rgba(255, 255, 255, 0.685);
+    padding: 16px;
+    border-radius: 20px;
+    box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
+    width: 90%;
+    margin: 36px;
+    margin-right: 25%;
+    height: auto;
+   
+  }
+
+  .textdivbutom{
+    font-size: 20px;
+    font-weight: bolder;
   }
 }
 
@@ -84,33 +102,6 @@ body {
  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-
-
-
-
-.pu-text {
-  margin-top: 15px;
-}
-
-
-
-.textTitle {
-  background-color: rgba(0, 0, 0, 0.637);
-  width: 30%;
-  margin: 25px auto 0;
-  border-radius: 15px;
-  padding: 8px;
-}
-
-
-.textsub {
-  background-color: rgba(0, 0, 0, 0.637);
-  width: 40%;
-  margin: -1px auto 0;
-  border-radius: 15px;
-  padding: 8px;
-}
-
 .image-list {
   display: flex;
   flex-wrap: wrap;
@@ -122,7 +113,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 200px;
+  width: 15%;
   padding: 10px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -137,36 +128,28 @@ body {
   margin-bottom: 10px;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+.pagination .page-link {
+  color: #007bff;
 }
 
-.pagination button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.pagination button.active {
+.pagination .page-item.active .page-link {
   background-color: #007bff;
-  color: white;
   border-color: #007bff;
 }
 
+
+
 .personalizarcamisas {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
   margin: 32px;
+  position: relative;
   border-radius: 20px;
   background-image: url("https://cdn.latostadora.com/img/designtoollandings/tshirts/es/mainbanner.desktop.webp");
   background-size: cover;
   background-position: center;
   box-shadow: 0 -1px 10px rgba(0, 0, 0, .7);
+  height: 70%;
+
 }
 
 .divbutom {
@@ -174,10 +157,12 @@ body {
   padding: 16px;
   border-radius: 20px;
   box-shadow: 0 -1px 10px rgba(255, 0, 0, 0.7);
-  margin-left: 65%;
-  margin-top: 20%;
-  margin-bottom: 3%;
+  bottom: 0; 
+  right: 0; 
+  position: absolute;
+  margin: 24px; 
 }
+
 
 .btnperzonalizar {
   margin-top: 24px;

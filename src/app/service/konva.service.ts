@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Konva from 'konva';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -149,18 +150,29 @@ export class KonvaService {
     reader.readAsDataURL(file);
   }
 
-  drawText(text: string) {
-    const textNode = new Konva.Text({
-      x: 50,
-      y: 70,
-      fontSize: 30,
+  drawText(text: string,) {
+    const textpath = new Konva.TextPath({
+      x: 0,
+      y: 50,
+      fill: '#333',
+      fontSize: 16,
+      fontFamily: 'Arial',
       text: text,
+      data: `M10,10 L5000,100`,  
       name: 'rect',
       draggable: true,
     });
-    this.layer.add(textNode);
+
+    this.layer.add(textpath);
     this.layer.draw();
-    this.transformer.nodes([textNode]);
+    this.transformer.nodes([textpath]);
+
+    const curveControl = document.getElementById('curveControl') as HTMLInputElement;
+    curveControl.addEventListener('input', (event) => {
+      const newControlPoint = curveControl.value;
+      const newPathData = `M10,50 C150,${50 - parseInt(newControlPoint)} 150,${50 + parseInt(newControlPoint)} 300,50`;      textpath.data(newPathData);
+      this.layer.draw();
+    });
   }
 
   deleteSelected() {

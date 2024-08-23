@@ -65,13 +65,30 @@
         <p>{{ image.alt }}</p>
       </div>
     </div>
+    <nav aria-label="Page navigation example" style="margin-top: 24px;">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="previousPage()">Previous</a>
+        </li>
+        <li class="page-item " style="display: flex;">
+          <a class="page-link">{{ currentPage }}</a>
+          <a class="page-link">{{ currentPage + 1 }}</a>
+          <a class="page-link">{{ currentPage + 2 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="(currentPage * itemsPerPage) >= catalogoImages.length">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
+  
 
 
   <div class="personalizarcamisas">
+    <h1>hola</h1>
     <div class="divbutom">
-      <h2>Peronaliza tu camisa ahora!!!</h2>
-      <h5>Crea tu diseños aqui</h5>
+      <h2 class="textdivbutom">Peronaliza tu camisa ahora!!!</h2>
+      <h5 class="textdivbutom">Crea tu diseños aqui</h5>
       <button class="btnperzonalizar" id="btnPersonalizar" routerLink="editor">Presiona aquí!</button>
     </div>
   </div>
